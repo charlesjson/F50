@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>UFI Panel Linux</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" type="module"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#overview"><svg class="app-icon" aria-hidden="true"><use href="./icons.svg#router"/></svg><strong>UFI Panel</strong></a>
+    <nav aria-label="主导航" id="primary-nav"></nav>
+    <div class="sidebar-bottom">
+      <section class="sidebar-telemetry" id="sidebar-telemetry" aria-label="实时设备状态" data-state="offline">
+        <div class="sidebar-telemetry-heading"><h2>设备状态</h2><span id="sidebar-telemetry-status" role="status">未连接</span></div>
+        <dl class="sidebar-readings">
+          <div><dt>CPU</dt><dd id="sidebar-cpu"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+          <div><dt>内存</dt><dd id="sidebar-memory"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+          <div><dt title="CPU 温度">温度</dt><dd id="sidebar-temperature"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+          <div><dt>今日用量</dt><dd id="sidebar-daily"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+          <div><dt>本月累计</dt><dd id="sidebar-monthly"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+          <div class="sidebar-download"><dt>下载</dt><dd id="sidebar-download"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+          <div class="sidebar-upload"><dt>上传</dt><dd id="sidebar-upload"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+        </dl>
+        <button class="sidebar-clients" id="sidebar-clients-button" data-go="clients" type="button" title="查看设备报告的 Wi-Fi 接入终端" aria-label="查看 Wi-Fi 接入设备" disabled><span>Wi-Fi</span><strong id="sidebar-clients"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></strong></button>
+        <p class="sidebar-updated" id="sidebar-updated">连接设备后显示</p>
+      </section>
+      <div class="device-mini">
+        <div class="device-mini-heading"><span class="status-dot" id="mini-dot"></span><strong id="mini-name">未连接设备</strong><button class="plain-button" id="edit-connection" title="连接设置" aria-label="管理连接"><svg class="icon" aria-hidden="true"><use href="./icons.svg#settings"/></svg></button></div>
+        <small id="mini-address">尚未选择设备</small>
+      </div>
+      <span class="sidebar-version" id="sidebar-version">Tauri</span>
+    </div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <div class="breadcrumb">UFI-TOOLS <span>/</span> <strong id="breadcrumb">设备总览</strong></div>
+      <div class="top-actions">
+        <button class="button secondary small" id="jobs-button">任务 <span id="job-count">0</span></button><span class="connection-state" id="connection-state" role="status"><i class="status-dot"></i>未连接</span>
+        <button class="button secondary small" data-open-panel>网页面板<svg class="icon" aria-hidden="true"><use href="./icons.svg#external"/></svg></button>
+        <button class="button primary small" id="connect-button">连接设备</button>
+      </div>
+    </header>
+    <nav class="section-nav" id="secondary-nav" aria-label="功能导航"></nav>
+    <div class="content">
+      <div class="page-heading">
+        <div><h1 id="page-title">设备总览</h1><p id="page-description">设备状态与蜂窝网络用量</p></div>
+        <button class="button secondary small" id="refresh-button" title="刷新当前页面（Ctrl+R）" aria-label="立即刷新"><svg class="icon" aria-hidden="true"><use href="./icons.svg#refresh"/></svg>刷新</button>
+      </div>
+      <div class="notice hidden" id="notice" role="status"><span id="notice-text"></span><button class="button secondary small hidden" id="retry-snapshot">重试</button></div>
+      <div class="notice hidden" id="history-warning" role="status"></div>
+      <section id="welcome" class="welcome">
+        <svg class="welcome-icon" aria-hidden="true"><use href="./icons.svg#router"/></svg>
+        <h2>连接你的 UFI 设备</h2><p>连接设备的 Wi-Fi 或 USB 网络后，填写 UFI-TOOLS 地址和口令。</p>
+        <button class="button primary" id="welcome-connect">添加连接</button>
+        <small id="welcome-profile">常用地址：192.168.0.1:2333</small>
+      </section>
+      <section class="view hidden" id="view-overview">
+        <div class="device-info">
+          <div class="device-identity"><div class="device-name-row"><h2 id="device-name">未连接设备</h2><span class="tag" id="device-tag">UFI-TOOLS</span><button class="text-button" id="device-details-button">详细信息</button></div><p id="device-subtitle">点击右上角“连接设备”添加连接。</p></div>
+          <dl class="device-facts"><div><dt>网络</dt><dd id="network-chip">—</dd></div><div><dt>固件版本</dt><dd id="firmware-chip">—</dd></div><div><dt>面板版本</dt><dd id="server-chip">—</dd></div></dl>
+        </div>
+        <div class="metric-grid">
+          <article class="metric-card"><div class="metric-label">电量</div><div class="metric-value"><span id="battery-value">—</span><small>%</small></div><div class="metric-foot" id="battery-hint">未提供电池读数</div></article>
+          <article class="metric-card"><div class="metric-label">CPU 温度</div><div class="metric-value"><span id="temperature">—</span><small>°C</small></div><div class="metric-foot" id="temperature-hint">尚无读数</div></article>
+          <article class="metric-card"><div class="metric-label">CPU 使用率</div><div class="metric-value"><span id="cpu-usage">—</span><small>%</small></div><div class="progress-track"><div id="cpu-progress" class="progress-fill"></div></div></article>
+          <article class="metric-card"><div class="metric-label">内存使用率</div><div class="metric-value"><span id="mem-usage">—</span><small>%</small></div><div class="metric-foot" id="memory-detail">尚无读数</div></article>
+          <article class="metric-card"><div class="metric-label">今日流量</div><div class="metric-value"><span id="daily-data">—</span><small id="daily-unit">GB</small></div><div class="metric-foot">蜂窝数据</div></article>
+        </div>
+        <div class="trend-toolbar"><span>实时监控 <small>· 自动保存历史 · 关闭到托盘后仍持续采集</small></span><div class="inline-actions"><button class="text-button" data-go="history">查看历史</button><label for="chart-window">趋势范围 <select id="chart-window"><option value="60000">最近 1 分钟</option><option value="300000" selected>最近 5 分钟</option><option value="600000">最近 10 分钟</option></select></label></div></div>
+        <div class="overview-columns">
+          <article class="card chart-card">
+            <div class="card-heading"><h3>实时速率</h3><div class="chart-key"><span><i class="metric-dot teal"></i>下载</span><span><i class="metric-dot blue"></i>上传</span></div></div>
+            <div class="speed-row"><div><small>下载</small><strong id="download-speed">—</strong></div><div><small>上传</small><strong id="upload-speed">—</strong></div></div>
+            <div class="chart-wrap"><canvas id="traffic-chart" aria-label="最近网络吞吐变化"></canvas><div class="chart-placeholder" id="chart-placeholder">尚无采样数据</div></div>
+            <div class="chart-axis"><span id="chart-duration">等待采样</span><span id="chart-scale">—</span><span>现在</span></div>
+          </article>
+          <article class="card device-summary">
+            <div class="card-heading"><h3>使用情况</h3></div>
+            <dl class="summary-list"><div class="summary-row"><dt>蜂窝网络</dt><dd id="cellular-status">—</dd></div><div class="summary-row"><dt>Wi-Fi 终端</dt><dd><button class="text-button" data-go="clients" id="client-count">—</button></dd></div><div class="summary-row"><dt>未读短信</dt><dd><button class="text-button" data-go="sms" id="unread-count">—</button></dd></div><div class="summary-row"><dt>本月流量</dt><dd id="monthly-data">—</dd></div></dl>
+            <div class="storage-block"><div class="storage-label"><span>存储空间</span><strong id="storage-ratio">—</strong></div><div class="progress-track"><div id="storage-progress" class="progress-fill blue-fill"></div></div><small id="storage-detail">尚无读数</small></div>
+          </article>
+        </div>
+        <div class="health-trends"><article class="card health-chart"><div class="card-heading"><h3>CPU 温度</h3><strong id="temperature-trend-current">—</strong></div><div class="chart-wrap"><canvas id="temperature-chart" aria-label="CPU 温度趋势"></canvas><div class="chart-placeholder" id="temperature-chart-placeholder">尚无采样数据</div></div><div class="chart-axis"><span id="temperature-trend-summary">等待有效读数</span><span id="temperature-trend-scale">—</span></div></article><article class="card health-chart"><div class="card-heading"><h3>CPU 使用率</h3><strong id="cpu-trend-current">—</strong></div><div class="chart-wrap"><canvas id="cpu-chart" aria-label="CPU 使用率趋势"></canvas><div class="chart-placeholder" id="cpu-chart-placeholder">尚无采样数据</div></div><div class="chart-axis"><span id="cpu-trend-summary">等待有效读数</span><span id="cpu-trend-scale">—</span></div></article><article class="card health-chart"><div class="card-heading"><h3>内存使用率</h3><strong id="memory-trend-current">—</strong></div><div class="chart-wrap"><canvas id="memory-chart" aria-label="内存使用率趋势"></canvas><div class="chart-placeholder" id="memory-chart-placeholder">尚无采样数据</div></div><div class="chart-axis"><span id="memory-trend-summary">等待有效读数</span><span id="memory-trend-scale">—</span></div></article></div>
+      </section>
+      <section class="view hidden" id="view-history">
+        <form id="history-query" class="card history-query"><fieldset id="history-fields">
+          <label class="history-device">历史设备<select id="history-device" aria-label="历史设备"><option value="">暂无记录</option></select></label>
+          <label>时间范围<select id="history-preset"><option value="1">最近 1 小时</option><option value="6">最近 6 小时</option><option value="24" selected>最近 24 小时</option><option value="168">最近 7 天</option><option value="720">最近 30 天</option><option value="custom">自定义</option></select></label>
+          <label>开始时间<input type="datetime-local" id="history-from" step="1" required></label>
+          <label>结束时间<input type="datetime-local" id="history-to" step="1" required></label>
+          <label>显示精度<select id="history-resolution"><option value="auto">自动汇总</option><option value="raw">原始采样（最多 5000 条）</option></select></label>
+          <button class="button primary" id="history-search" type="submit">查询历史</button>
+        </fieldset></form>
+        <p class="feature-hint">客户端连接设备后自动记录，暂停采集或退出客户端后停止。关闭到托盘继续记录；已保存的数据可离线查看。历史按接入模式和服务地址区分。</p>
+        <p id="history-status" class="feature-hint" role="status">选择设备和日期查看历史。</p>
+        <div id="history-summary" class="history-summary"></div>
+        <div class="history-legend"><span><i class="metric-dot teal"></i>下载 / 当日累计</span><span><i class="metric-dot blue"></i>上传 / 当月累计</span><span>断线、暂停和重连处断开曲线；缺失读数显示为 —</span></div>
+        <div id="history-charts" class="history-charts"></div>
+        <p id="history-cursor" class="feature-hint history-cursor">尚无采样数据</p>
+        <article class="card table-card"><div class="card-heading"><h3>历史读数</h3><span class="muted">汇总时数值为平均值，流量为末次累计读数</span></div>
+          <div class="table-scroll"><table><thead><tr><th>采样时间</th><th>CPU</th><th>内存</th><th>温度</th><th>下载</th><th>上传</th><th>当日累计</th><th>当月累计</th><th>Wi-Fi 终端</th><th>电量</th><th>4G / 5G RSRP (dBm)</th></tr></thead><tbody id="history-rows"></tbody></table></div>
+          <div class="section-toolbar history-pagination"><span id="history-storage" class="muted"></span><div class="pagination"><button type="button" class="button secondary small" id="history-previous">上一页</button><span id="history-page"></span><button type="button" class="button secondary small" id="history-next">下一页</button></div></div>
+        </article>
+      </section>
+      <section class="view hidden" id="view-signal">
+        <div class="section-toolbar"><p>未提供的信号指标显示为 —</p><button class="button secondary small" id="export-button"><svg class="icon" aria-hidden="true"><use href="./icons.svg#download"/></svg>导出状态</button></div>
+        <div class="signal-grid" id="signal-grid"></div>
+        <article class="card"><div class="card-heading"><h3>温度传感器</h3></div><div id="sensors" class="sensor-grid"><p class="empty">连接设备后读取传感器。</p></div></article>
+      </section>
+      <section class="view hidden" id="view-clients">
+        <p id="clients-access-note" class="feature-hint">Wi-Fi 终端可踢出并加入黑名单，解除后才能重新连接。</p>
+        <div class="search-row"><input id="client-search" type="search" placeholder="搜索设备名称、IP 或 MAC" aria-label="搜索连接终端"><select id="client-type" aria-label="连接类型"><option value="">全部连接</option><option>Wi-Fi</option><option>有线</option></select><select id="client-sort" aria-label="终端排序"><option value="name">按名称</option><option value="ip">按 IP 地址</option></select><span id="clients-updated" class="list-updated"></span></div>
+        <div id="clients-status" class="list-status hidden" role="status"></div>
+        <article class="card table-card"><div class="card-heading"><h3>在线终端</h3><span class="count-badge" id="clients-total">—</span></div><div id="clients-content" class="empty">连接设备后读取终端列表。</div></article>
+        <article class="card table-card hidden" id="blocked-clients-card"><div class="card-heading"><h3>设备黑名单</h3><span class="count-badge" id="blocked-clients-total">0 台</span></div><div id="blocked-clients-content" class="table-scroll"></div></article>
+      </section>
+      <section class="view hidden" id="view-sms">
+        <div class="section-toolbar"><div class="inline-actions"><button class="button primary small" id="compose-sms">写短信</button><span class="muted">查看不会标记已读</span></div><div class="pagination"><button class="button secondary small" id="sms-previous">上一页</button><span id="sms-page">第 1 页</span><button class="button secondary small" id="sms-next">下一页</button></div></div>
+        <div id="sms-folders" class="sms-folders" role="tablist" aria-label="短信分类"></div>
+        <p id="sms-mailbox-note" class="feature-hint">从设备读取收件与发件记录。</p>
+        <div class="search-row"><input id="sms-search" type="search" placeholder="搜索本页号码或内容" aria-label="搜索本页短信"><label class="inline-check"><input id="sms-unread" type="checkbox">仅未读</label><span id="sms-total">尚未加载</span></div>
+        <div id="sms-status" class="list-status hidden" role="status"></div><div id="sms-content" class="sms-list" role="tabpanel" aria-label="短信列表"><div class="empty">连接设备后读取短信。</div></div>
+      </section>
+      <section class="view hidden" id="view-plugins">
+        <div class="section-toolbar"><div id="plugin-tabs" class="subnav" role="tablist" aria-label="插件分类"></div><div class="inline-actions"><button class="button secondary small" id="manage-plugins">高级编辑</button><button class="button secondary small" data-open-panel>完整设备面板<svg class="icon" aria-hidden="true"><use href="./icons.svg#external"/></svg></button></div></div>
+        <p id="plugin-note" class="feature-hint"></p>
+        <div class="search-row"><input id="plugin-search" type="search" placeholder="搜索插件" aria-label="搜索插件"><select id="plugin-sort" aria-label="插件排序"><option value="name">按名称</option><option value="modified">最近更新</option><option value="size">文件大小</option></select><span id="plugin-count">尚未加载</span></div>
+        <div id="plugins-status" class="list-status hidden" role="status"></div><div class="plugin-table"><div class="plugin-table-heading hidden" id="plugin-market-heading"><span>插件名称</span><span>更新日期</span><span>大小</span></div><div id="plugins-content" role="tabpanel" aria-label="插件列表"><div class="empty">连接设备后读取插件。</div></div></div>
+      </section>
+      <section class="view hidden" id="view-network"><div class="subnav hidden" id="network-tabs"></div><div id="network-host"></div></section>
+      <section class="view hidden" id="view-traffic"><div id="traffic-host"></div></section>
+      <section class="view hidden" id="view-forward"><div id="forward-host"></div></section>
+      <section class="view hidden" id="view-tasks"><div id="tasks-host"></div></section>
+      <section class="view hidden" id="view-device"><div id="device-host"></div></section>
+<section class="view hidden" id="view-zwrt-recovery"><div id="zwrt-recovery-host"></div></section>
+<section class="view hidden" id="view-zwrt-activity"><div id="zwrt-activity-host"></div></section>
+<section class="view hidden" id="view-zwrt-remote"><div id="zwrt-remote-host"></div></section>
+<section class="view hidden" id="view-zwrt-updates"><div id="zwrt-updates-host"></div></section>
+<section class="view hidden" id="view-zwrt-control"><div id="zwrt-control-host"></div></section><section class="view hidden" id="view-speed"><div id="speed-host"></div></section>
+<section class="view hidden" id="view-proxy"><div id="proxy-host"></div></section>
+<section class="view hidden" id="view-updates"><div id="updates-host"></div></section>
+<section class="view hidden" id="view-appearance"><div id="appearance-host"></div></section>
+<section class="view hidden" id="view-authentication"><div id="authentication-host"></div></section>
+<section class="view hidden" id="view-service"><div id="service-host"></div></section>
+<section class="view hidden" id="view-location"><div id="location-host"></div></section>
+<section class="view hidden" id="view-usb"><div id="usb-host"></div></section>
+<section class="view hidden" id="view-preferences"><div id="preferences-host"></div></section>
+<section class="view hidden" id="view-voice"><div id="voice-host"></div></section>
+      <section class="view hidden" id="view-tools"><div class="section-toolbar"><p>按目标卡槽执行 AT；Shell 在设备端执行。</p><div class="inline-actions"><button class="button secondary small" id="open-ttyd">TTYD</button><button class="button secondary small" id="one-click-shell">一键工程 Shell</button></div></div>
+        <article class="card terminal-card">
+          <div class="terminal-controls"><label for="command-kind">类型</label><select id="command-kind" aria-label="命令类型"><option value="user">普通 Shell</option><option value="root">Root Shell</option><option value="at">AT 命令</option></select><select id="command-slot" aria-label="AT 目标卡槽"><option value="0">SIM 槽位 0</option><option value="1">SIM 槽位 1</option></select><input id="command-template-search" class="hidden" type="search" aria-label="搜索 AT 模板" placeholder="搜索名称或 AT 指令"><select id="command-preset" aria-label="常用命令"><option value="">常用查询</option><option value="uptime">运行时间</option><option value="df -h /data">存储空间</option><option value="getprop ro.build.display.id">固件版本</option><option value="cat /proc/meminfo">内存信息</option></select></div>
+          <p class="feature-hint" id="command-template-hint"></p>
+          <form id="command-form"><label for="command">命令</label><textarea id="command" maxlength="8192" rows="3" placeholder="uptime" spellcheck="false" required></textarea><div class="terminal-submit"><span>Ctrl+Enter 执行 · 提交后确认目标与命令</span><button class="button primary" id="run-command" type="submit">执行</button></div></form>
+          <div class="output-heading"><span id="command-status">输出</span><div><button class="text-button" id="copy-output" disabled>复制</button><button class="text-button" id="clear-output" disabled>清空</button></div></div><pre class="terminal-output" id="command-output">尚未执行命令</pre>
+        </article>
+      </section>
+    </div>
+    <footer><span id="last-update">尚未连接</span><div class="footer-controls"><span id="poll-description">自动刷新</span><label class="poll-control" for="poll-interval"><span class="sr-only">刷新间隔</span><select id="poll-interval"><option value="1000">1 秒</option><option value="2000" selected>2 秒</option><option value="5000">5 秒</option><option value="10000">10 秒</option><option value="15000">15 秒</option><option value="30000">30 秒</option><option value="0">暂停 / 手动</option></select></label></div></footer>
+  </main>
+  <dialog id="connection-dialog" aria-labelledby="connection-title">
+    <form id="connection-form">
+      <div class="dialog-heading"><h2 id="connection-title">连接设置</h2><button type="button" class="plain-button close-dialog" id="close-dialog" aria-label="关闭连接设置"><svg class="icon" aria-hidden="true"><use href="./icons.svg#close"/></svg></button></div>
+      <p class="dialog-description" id="connection-help">已保存的设备可直接选择；口令仅在本机使用。</p><fieldset id="connection-fields"><label for="saved-profile">已保存的设备</label><div class="profile-row"><select id="saved-profile"><option value="">添加设备</option></select><button type="button" class="button secondary small" id="delete-profile">删除</button></div>
+      <label for="connection-mode">接入模式</label><select id="connection-mode"><option value="KANO">UFI-TOOLS（KANO）</option><option value="GOFORM">中兴原厂后台直连（GOFORM，实验性）</option><option value="ZWRT">ZWRT / datad（尚无真机验证）</option></select><label for="login-method">原厂登录方式</label><select id="login-method"><option value="LOGIN">标准 LOGIN</option><option value="LOGIN_MULTI_USER">LOGIN_MULTI_USER</option></select><label for="profile-name">名称</label><input id="profile-name" name="name" value="F50" maxlength="60" required>
+      <label for="address">服务地址</label><input id="address" name="address" value="http://192.168.0.1:2333" placeholder="http://192.168.0.1:2333" required>
+      <label for="password">UFI-TOOLS 口令</label><div class="password-field"><input id="password" name="password" type="password" autocomplete="off" maxlength="256" placeholder="面板登录口令"><button type="button" class="text-button" data-toggle-password="password" aria-label="显示 UFI-TOOLS 口令" aria-pressed="false">显示</button></div>
+      <label for="zte-password">中兴后台口令 <span class="muted">（可选）</span></label><div class="password-field"><input id="zte-password" name="ztePassword" type="password" autocomplete="off" maxlength="256" placeholder="通常为 admin"><button type="button" class="text-button" data-toggle-password="zte-password" aria-label="显示中兴后台口令" aria-pressed="false">显示</button></div><small class="field-hint" id="zte-password-hint">读取短信和终端列表时使用。</small>
+      <label class="checkbox-label"><input id="remember" type="checkbox">保存口令</label><small class="field-hint" id="keyring-hint">正在检查系统密钥环</small>
+      </fieldset><p class="form-error hidden" id="connection-error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" class="button secondary" id="disconnect-button">断开连接</button><div><button class="button secondary" type="button" id="cancel-connection">取消</button><button class="button primary" type="submit" id="submit-connection">连接</button></div></div>
+    </form>
+  </dialog>
+  <dialog id="feature-dialog" aria-labelledby="feature-dialog-title"><div class="dialog-heading"><h2 id="feature-dialog-title"></h2><button class="plain-button" id="close-feature-dialog" aria-label="关闭"><svg class="icon"><use href="./icons.svg#close"/></svg></button></div><div id="feature-dialog-body"></div></dialog>
+  <div id="toast" class="toast hidden" role="status"></div>
+</body>
+</html>

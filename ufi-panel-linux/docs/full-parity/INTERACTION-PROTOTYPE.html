@@ -1,0 +1,5744 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>UFI Panel · 全量交互规划</title><style>:root{color-scheme:light;--ink:#26332e;--muted:#69716c;--line:#e1e5e2;--bg:#f5f6f5;--accent:#306950;--soft:#e9f0eb;font:13px 'Noto Sans CJK SC','Microsoft YaHei',system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;height:100vh;overflow:hidden;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer;color:inherit}button:disabled{opacity:.45;cursor:default}button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button{border:1px solid #d7ded9;border-radius:4px;background:#fff;padding:7px 11px}button:hover:not(:disabled){background:#f0f4f1}input,select,textarea{border:1px solid #ccd5ce;border-radius:4px;padding:9px 10px;background:#fff;color:var(--ink);width:100%;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px #30695014}textarea{resize:vertical}h1,h2,h3,p,dl,dd{margin:0}h1{font-size:24px;font-weight:600;letter-spacing:-.5px}h2{font-size:18px}h3{font-size:13px;font-weight:600}small{font-size:11px}a{color:var(--accent)}.sidebar{width:190px;position:fixed;inset:0 auto 0 0;border-right:1px solid var(--line);background:#eef1ee;display:flex;flex-direction:column}.brand{height:61px;display:flex;align-items:center;padding:0 19px;gap:9px;border-bottom:1px solid var(--line)}.brand strong{font-size:15px;font-family:system-ui}.brand small{font-size:10px;color:var(--muted);margin-left:auto}.brand svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}.device-picker{display:flex;gap:9px;align-items:center;background:#fff;margin:19px 12px 12px;padding:12px 9px;text-align:left}.device-picker strong{font-size:12px;font-weight:600}.device-picker small{display:block;color:var(--muted);font:9px monospace;margin-top:5px}.chevron{margin-left:auto}.online-dot{width:6px;height:6px;background:#55856b;border-radius:50%;flex-shrink:0}#main-nav{display:flex;flex-direction:column;padding:9px 10px;gap:5px}.nav-item{border:0;background:transparent;display:flex;align-items:center;gap:12px;padding:12px 14px;color:#5a665e;text-align:left}.nav-item svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.nav-item.active{background:#dce8de;color:#254f37;font-weight:600;box-shadow:inset 3px 0 #37694b}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:12px}.side-bottom>button{width:100%;text-align:left;background:none;border:0;color:var(--muted);display:flex;justify-content:space-between}.side-bottom>button.active{color:var(--accent);background:#dce8de}.prototype-label{font-size:10px;color:#7a837d;padding:13px 10px 4px}main{margin-left:190px;height:100vh;display:flex;flex-direction:column;min-width:0}.topbar{height:61px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line);padding:0 26px;gap:16px}.breadcrumbs{display:flex;align-items:center;gap:11px;color:#869087;font-size:11px}.breadcrumbs strong{font-weight:400;color:#4c5b50}.top-actions{display:flex;align-items:center;gap:14px}.top-actions button{font-size:11px}.search-trigger{display:flex;align-items:center;justify-content:space-between;gap:40px;color:#6f7c71;min-width:200px}.search-trigger kbd{font:10px system-ui;color:#859088}.mode-picker{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:10px;white-space:nowrap}.mode-picker select{padding:5px 6px;font:11px system-ui;width:105px}.design-notice{padding:8px 26px;background:#fcfbf4;border-bottom:1px solid #e9e5d6;color:#847746;font-size:10px;flex-shrink:0}.section-nav{display:flex;gap:4px;overflow-x:auto;flex-shrink:0;padding:0 26px;border-bottom:1px solid var(--line);background:#fff;scrollbar-width:thin}.section-nav button{border:0;border-radius:0;white-space:nowrap;background:none;padding:14px 12px;border-bottom:2px solid transparent;font-size:12px;color:var(--muted)}.section-nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}.workspace{padding:26px;overflow:auto;flex:1;min-height:0;scrollbar-gutter:stable;outline:none}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:23px}.page-heading p{color:var(--muted);font-size:12px;margin-top:7px;line-height:1.7}.heading-actions{display:flex;gap:9px}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.primary:hover:not(:disabled){background:#24553e}.danger{color:#a33b2b;border-color:#d9bcb3}.panel{background:#fff;border:1px solid var(--line);border-radius:5px;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);gap:14px}.panel-head small{color:var(--muted)}.panel-body{padding:20px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.metric{padding:20px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric>small{color:var(--muted)}.metric strong{display:block;font:500 29px system-ui;margin:8px 0;font-variant-numeric:tabular-nums}.metric strong small{font-size:12px;color:var(--muted);margin-left:5px}.metric p{font-size:10px;color:var(--muted)}.two-col{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:18px}.stat-list{padding:5px 20px 10px}.stat-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #edf0ec;font-size:12px;gap:18px}.stat-row:last-child{border:0}.stat-row span{color:var(--muted)}.stat-row strong{font-weight:500;text-align:right}.link-button{padding:2px 0;border:0;background:none;color:var(--accent);font-size:12px}.chart{height:160px;margin:12px 0}.chart svg{width:100%;height:100%;overflow:visible}.chart-foot{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}.speed-values{display:flex;gap:40px}.speed-values small{color:var(--muted)}.speed-values strong{display:block;font:500 22px system-ui;color:var(--accent);margin-top:6px}.speed-values>div:nth-child(2) strong{color:#5f7e9b}.note{font-size:11px;color:var(--muted);line-height:1.8;padding:12px 0;overflow-wrap:anywhere}.mini-tag,.status{font-size:10px;display:inline-flex;align-items:center;white-space:nowrap;padding:3px 7px;border-radius:3px;background:#f1f3f1;color:#69766c;border:1px solid #e1e7e1}.status.existing{background:#eaf3ed;color:#3f7053;border-color:#cfe0d4}.status.partial{background:#fbf5e7;color:#8c7137;border-color:#e9dfc6}.status.missing{background:#f2f3f4;color:#69747d}.status.equivalent{background:#edf1f8;color:#5f7190}.status.research{background:#f4edf3;color:#836a7f}.workspace-toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}.workspace-toolbar input{max-width:360px}.workspace-toolbar select{width:auto;min-width:140px}.workspace-toolbar>small{color:var(--muted);margin-left:auto}.feature-list{display:flex;flex-direction:column}.feature-row{display:grid;grid-template-columns:minmax(160px,1.2fr) minmax(150px,1.5fr) 160px 30px;align-items:center;gap:20px;padding:16px 20px;border:0;border-bottom:1px solid var(--line);border-radius:0;text-align:left;width:100%;background:#fff}.feature-row:last-child{border-bottom:0}.feature-row:hover{background:#f6f9f6}.feature-row strong{display:block;font-size:12px;font-weight:500}.feature-row small{font:10px monospace;color:#849084;display:block;margin-top:5px}.feature-row p{font-size:11px;color:var(--muted);line-height:1.7}.feature-row .arrow{color:#9ba79c;font-size:18px}.baseline-bar{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}.baseline-bar .legend{display:flex;gap:6px;align-items:center}.baseline-bar i{width:6px;height:6px;border-radius:50%;background:#93b39b}.split-view{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:360px}.message-list{border-right:1px solid var(--line)}.message-item{width:100%;text-align:left;border:0;border-radius:0;padding:17px 18px;border-bottom:1px solid var(--line);background:#fff}.message-item.active{background:#eef5ef;box-shadow:inset 3px 0 #4d7e5c}.message-item strong{font-size:12px;display:block;margin-bottom:7px}.message-item p{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.message-item time{font-size:10px;color:#8d978c;display:block;margin-top:8px}.message-detail{padding:24px;min-width:0}.message-detail p{font-size:13px;line-height:2;margin:22px 0;color:#4e5b50}.message-actions{display:flex;gap:10px;flex-wrap:wrap}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;text-align:left;font-size:12px}th{font-size:11px;font-weight:500;color:var(--muted);padding:12px 18px;background:#f8faf8;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:13px 18px;border-bottom:1px solid var(--line)}tr:last-child td{border:0}.mono{font-family:monospace;font-size:11px}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px;border-bottom:1px solid var(--line)}.setting-row:last-child{border:0}.setting-row h3{margin-bottom:6px}.setting-row p{font-size:11px;color:var(--muted);line-height:1.7}.setting-value{display:flex;align-items:center;gap:14px;white-space:nowrap;font-size:12px}.flow-line{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:15px 0}.flow-line span{background:#f2f5f2;padding:7px 11px;border:1px solid var(--line);border-radius:4px}.summary-counts{display:flex;gap:30px;font-size:11px;color:var(--muted);padding:17px 20px}.summary-counts strong{font:500 22px system-ui;color:var(--ink);margin-right:7px}.roadmap-list{display:grid;gap:13px}.phase{display:grid;grid-template-columns:52px 1fr;gap:17px;padding:20px;background:#fff;border:1px solid var(--line);border-radius:5px}.phase-id{font:600 15px monospace;color:var(--accent);padding-top:2px}.phase ul{padding-left:18px;margin:12px 0;font-size:12px;line-height:1.9;color:#5d6d5f}.phase p{font-size:11px;line-height:1.8;color:var(--muted)}footer{height:35px;flex-shrink:0;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:14px;padding:0 26px;font-size:10px;color:var(--muted);background:#eff2ef}dialog{border:1px solid #ccd5cd;border-radius:7px;padding:0;width:560px;max-width:calc(100vw - 48px);max-height:calc(100vh - 48px);color:var(--ink);background:#fff;box-shadow:0 12px 50px #172a2526;overflow:hidden}dialog[open]{display:flex;flex-direction:column}dialog::backdrop{background:#18251e50}dialog.drawer{margin:16px 16px 16px auto;height:calc(100vh - 32px);max-height:none;width:540px}dialog.wide{width:860px}dialog.search{width:680px;max-height:80vh;margin-top:90px}dialog>header{display:flex;align-items:center;justify-content:space-between;padding:21px 24px;border-bottom:1px solid var(--line);flex-shrink:0}dialog header small{display:block;color:var(--muted);margin-bottom:6px;font-size:10px}dialog header h2{font-size:18px}.icon-button{border:0;background:none;padding:3px 8px;font:23px system-ui;color:#7c8b7f}#overlay-body{padding:22px 24px;overflow:auto;min-height:0;flex:1}#overlay-actions{display:flex;justify-content:flex-end;gap:9px;padding:16px 24px;border-top:1px solid var(--line);flex-shrink:0;background:#fbfcfb}#overlay-actions:empty{display:none}.detail-label{font-size:10px;color:var(--muted);margin:20px 0 7px;text-transform:uppercase}.detail-label:first-child{margin-top:0}.detail-text{font-size:12px;line-height:1.9;overflow-wrap:anywhere}.detail-code{font:11px/1.9 monospace;background:#f3f5f3;padding:11px 13px;border-radius:4px;overflow-wrap:anywhere}.form-field{display:block;margin-bottom:18px;font-size:12px}.form-field>span{display:block;color:#536357;margin-bottom:7px}.form-field small{display:block;color:var(--muted);font-size:10px;line-height:1.8;margin-top:6px}.form-two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.review-diff{display:grid;grid-template-columns:90px 1fr 20px 1fr;gap:9px;align-items:center;border-bottom:1px solid var(--line);padding:13px 0;font-size:12px}.review-diff>span{color:var(--muted)}.review-diff strong{font-weight:500;overflow-wrap:anywhere}.review-note{border-left:3px solid #c1a264;padding:9px 12px;background:#fcf8ee;color:#836e3e;font-size:12px;line-height:1.8;margin:20px 0}.success-mark{font-size:13px;color:var(--accent);padding:12px;background:#eef6ef;border:1px solid #d7e4d8;border-radius:4px}.search-results{display:flex;flex-direction:column;margin-top:14px}.search-result{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 4px;text-align:left;display:flex;justify-content:space-between;gap:15px}.search-result small{display:block;color:var(--muted);margin-top:4px;font-size:10px}.empty{padding:35px 12px;text-align:center;color:var(--muted);font-size:12px}.task-item{padding:16px 0;border-bottom:1px solid var(--line)}.task-item strong{font-size:12px}.task-item p{font-size:11px;color:var(--muted);margin-top:8px}.task-progress{height:4px;background:#edf1ed;margin-top:12px}.task-progress div{width:100%;height:100%;background:#7da48a}.task-item button{font-size:11px;margin-top:9px}.tree{font:12px/2 monospace}.tree details{margin-left:15px}.tree summary{cursor:pointer;color:#4c6b55}.capture-row{cursor:pointer}.capture-row.active{background:#eff5f0}.state-banner{background:#eef3f7;border:1px solid #d9e3e9;color:#5c7181;padding:11px 14px;border-radius:4px;font-size:11px;line-height:1.7;margin-bottom:17px}.toast{position:fixed;bottom:48px;left:calc(50% + 95px);transform:translateX(-50%);background:#34483b;color:#fff;padding:10px 17px;border-radius:4px;font-size:12px;z-index:70;pointer-events:none;box-shadow:0 3px 10px #0001}.toast[hidden]{display:none}.radio-options{display:flex;gap:9px;flex-wrap:wrap}.radio-options label{border:1px solid var(--line);border-radius:4px;padding:9px;font-size:12px;display:flex;align-items:center;gap:8px}.radio-options input{width:auto;box-shadow:none}.step-caption{color:var(--muted);font-size:11px;margin-bottom:18px}.flow-card{padding:17px;background:#f5f7f5;border:1px solid var(--line);border-radius:5px}.flow-card p{font-size:12px;line-height:1.8;margin-top:5px}.panel-spaced{margin-top:18px}@media(max-width:1150px){.sidebar{width:168px}.brand{padding:0 13px}.brand small{display:none}main{margin-left:168px}.topbar{padding:0 20px}.search-trigger{min-width:160px;gap:18px}.workspace{padding:22px 20px}.section-nav{padding:0 20px}.mode-picker>span{display:none}.two-col{grid-template-columns:1.4fr 1fr}.feature-row{grid-template-columns:1fr 1fr 125px 16px;gap:12px;padding:14px}.feature-row .status{white-space:normal}.split-view{grid-template-columns:250px 1fr}.summary-counts{gap:17px}.toast{left:calc(50% + 84px)}footer{padding:0 20px;font-size:9px}}@media(max-width:850px){.two-col{grid-template-columns:1fr}.feature-row{grid-template-columns:1fr 130px 20px}.feature-row p{display:none}.split-view{grid-template-columns:1fr}.message-list{border-right:0}.top-actions{gap:7px}.search-trigger{min-width:0}.search-trigger kbd{display:none}.breadcrumbs{display:none}.mode-picker select{width:98px}.sidebar{width:140px}main{margin-left:140px}.device-picker small{font-size:8px}.metrics{grid-template-columns:repeat(2,1fr)}.metric:nth-child(2){border:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.summary-counts{flex-wrap:wrap}.design-notice{padding:8px 20px}.form-two-col{grid-template-columns:1fr}footer>span:last-child{display:none}.toast{left:calc(50% + 70px)}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style></head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="18" height="8" rx="2"/><path d="M7 12V4m10 8V4M7 16h.1m4 0h.1m4 0h3"/></svg><strong>UFI Panel</strong><small>Linux</small></div>
+  <button class="device-picker" id="device-picker"><span class="online-dot"></span><span><strong>F50</strong><small>192.168.0.1:2333</small></span><span class="chevron">⌄</span></button>
+  <nav aria-label="主导航" id="main-nav"></nav>
+  <div class="side-bottom"><button id="catalog-button">功能对照 <span id="catalog-size"></span></button><button id="roadmap-button">实施计划</button><div class="prototype-label">交互原型 · 演示数据</div></div>
+</aside>
+<main>
+  <header class="topbar"><div class="breadcrumbs"><span>F50</span><span>/</span><strong id="crumb">概览</strong></div><div class="top-actions"><button id="search-button" class="search-trigger"><span>搜索功能</span><kbd>Ctrl K</kbd></button><label class="mode-picker"><span>模拟模式</span><select id="backend"><option>KANO</option><option>GOFORM</option><option>ZWRT</option><option>STANDALONE</option></select></label><button id="jobs-button" title="打开任务中心">任务 <span id="job-count">0</span></button></div></header>
+  <div class="design-notice">交互规划预览，不会连接设备或提交操作。功能状态以 0.3.0 为基线，完整实现仍按计划推进。</div>
+  <nav class="section-nav" aria-label="二级导航" id="section-nav"></nav>
+  <div class="workspace" id="workspace" tabindex="-1"></div>
+  <footer><span id="footer-text">当前验证设备：F50 / UFI-TOOLS</span><span>单一编辑层 · 保存前预览变更 · 任务可追踪</span></footer>
+</main>
+<dialog id="overlay" aria-labelledby="overlay-title"><header><div><small id="overlay-kicker"></small><h2 id="overlay-title"></h2></div><button class="icon-button" id="overlay-close" aria-label="关闭">×</button></header><div id="overlay-body"></div><div id="overlay-actions"></div></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<script id="catalog-data" type="application/json">{
+  "title": "UFI Panel Linux 全量迁移清单",
+  "baseline": "UFI Panel 1.10.1 (87)",
+  "currentDesktop": "0.3.0",
+  "apkSha256": "ffbcb93f64a9c1aa99a8229f9b90f8121d729eb67f0b8d379fe5eb07501c50d6",
+  "scope": "目标为 APK 可观察用户功能全量迁移，保留 Linux 已有附加功能；关联证据项仍需核实具体 APK 入口。代码模式支持与固件能力分开记录，不以页面入口替代实现。",
+  "testEnvironment": {
+    "available": [
+      "F50 / UFI-TOOLS"
+    ],
+    "unavailable": [
+      "ZWRT/datad",
+      "Android 独立模式"
+    ],
+    "confirmedByUser": true
+  },
+  "completeness": "静态清单：覆盖已恢复的页面声明、主要菜单、端点与资源。JADX 存在反编译失败与动态字符串，运行态逐页核对仍是完整性验收前置项。",
+  "groups": [
+    {
+      "id": "overview",
+      "name": "概览",
+      "icon": "overview",
+      "sections": [
+        [
+          "dashboard",
+          "设备总览"
+        ],
+        [
+          "parameters",
+          "网络参数"
+        ],
+        [
+          "usage",
+          "流量统计"
+        ],
+        [
+          "location",
+          "设备定位"
+        ]
+      ]
+    },
+    {
+      "id": "network",
+      "name": "网络",
+      "icon": "signal",
+      "sections": [
+        [
+          "cellular",
+          "蜂窝与 SIM"
+        ],
+        [
+          "bands",
+          "频段与基站"
+        ],
+        [
+          "apn",
+          "APN"
+        ],
+        [
+          "hotspot",
+          "Wi-Fi 热点"
+        ],
+        [
+          "lan",
+          "LAN / USB"
+        ],
+        [
+          "clients",
+          "连接终端"
+        ]
+      ]
+    },
+    {
+      "id": "messages",
+      "name": "消息",
+      "icon": "mail",
+      "sections": [
+        [
+          "sms",
+          "短信"
+        ],
+        [
+          "forward",
+          "转发与通知"
+        ],
+        [
+          "activity",
+          "通知与执行记录"
+        ]
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "工具",
+      "icon": "terminal",
+      "sections": [
+        [
+          "speed",
+          "测速"
+        ],
+        [
+          "capture",
+          "信令分析"
+        ],
+        [
+          "terminal",
+          "AT / Shell"
+        ],
+        [
+          "proxy",
+          "HTTP 代理"
+        ],
+        [
+          "usb",
+          "USB 信息"
+        ]
+      ]
+    },
+    {
+      "id": "automation",
+      "name": "自动化",
+      "icon": "refresh",
+      "sections": [
+        [
+          "tasks",
+          "定时任务"
+        ],
+        [
+          "recovery",
+          "断网恢复"
+        ],
+        [
+          "autostart",
+          "开机与共享守护"
+        ]
+      ]
+    },
+    {
+      "id": "system",
+      "name": "系统",
+      "icon": "settings",
+      "sections": [
+        [
+          "devices",
+          "设备与连接"
+        ],
+        [
+          "settings",
+          "设备设置"
+        ],
+        [
+          "plugins",
+          "插件"
+        ],
+        [
+          "updates",
+          "软件更新"
+        ],
+        [
+          "appearance",
+          "外观与文件"
+        ],
+        [
+          "remote",
+          "远程管理"
+        ],
+        [
+          "app",
+          "客户端设置"
+        ],
+        [
+          "about",
+          "关于与授权"
+        ]
+      ]
+    }
+  ],
+  "screenRoutes": {
+    "AboutScreen": "about",
+    "ApnEditScreen": "apn",
+    "ApnListScreen": "apn",
+    "AppSettingsScreen": "app",
+    "AtTerminalScreen": "terminal",
+    "BandScreen": "bands",
+    "CellLockProductScreen": "bands",
+    "ConnectScreen": "devices",
+    "DeviceLocationScreen": "location",
+    "FelineCarrierSwitchScreen": "cellular",
+    "FullSpeedScreen": "speed",
+    "HomeScreen": "dashboard",
+    "HotspotScreen": "hotspot",
+    "ImagePreviewDialog": "appearance",
+    "NdjsonRecordDialog": "capture",
+    "OtaScreen": "updates",
+    "ParamsScreen": "parameters",
+    "PrivacyScreen": "about",
+    "ProxyToolScreen": "proxy",
+    "RrcTreeDialog": "capture",
+    "SettingsScreen": "settings",
+    "ShellScreen": "terminal",
+    "SignalCaptureScreen": "capture",
+    "SmsComposeScreen": "sms",
+    "SmsForwardScreen": "forward",
+    "SmsTabScreen": "sms",
+    "SpeedtestScreen": "speed",
+    "StandaloneAutostartModuleScreen": "autostart",
+    "TimingAdvanceDistanceDialog": "parameters",
+    "UfiToolsPluginAutostartScreen": "autostart",
+    "UfiToolsWidget": "app",
+    "UsageScreen": "usage",
+    "WidgetSettingsScreen": "app",
+    "ZwrtActivityScreen": "activity",
+    "ZwrtLanScreen": "lan",
+    "ZwrtNmsScreen": "remote",
+    "ZwrtOemAccessScreen": "remote",
+    "ZwrtOtaScreen": "updates",
+    "ZwrtRecoveryScreen": "recovery",
+    "ZwrtShellScreen": "terminal",
+    "ZwrtSmsForwardScreen": "forward",
+    "ZwrtTasksScreen": "tasks",
+    "ZwrtUsageScreen": "usage"
+  },
+  "phases": [
+    {
+      "id": "P0",
+      "name": "建立完整证据与验收基线",
+      "depends": [],
+      "sections": [],
+      "deliverables": [
+        "运行 APK 逐页核对与四后端分支对照",
+        "页面/端点/操作证据清单",
+        "每项分离 UI、协议、真机读取、真机写入回读状态"
+      ],
+      "doneWhen": "所有可达入口都有清单 ID；未能验证的分支注明条件和证据，不能被当作完成"
+    },
+    {
+      "id": "P1",
+      "name": "导航、层级与状态基础",
+      "depends": [
+        "P0"
+      ],
+      "sections": [
+        "devices",
+        "app"
+      ],
+      "deliverables": [
+        "六组导航与可搜索功能入口",
+        "统一抽屉/确认/未保存更改处理",
+        "设备会话、草稿与长任务状态隔离"
+      ],
+      "doneWhen": "旧有功能无回归；1024×700 与高 DPI 下无不可达操作；键盘关闭和焦点恢复通过"
+    },
+    {
+      "id": "P2",
+      "name": "KANO 与 GOFORM 基础管理闭环",
+      "depends": [
+        "P1"
+      ],
+      "sections": [
+        "dashboard",
+        "parameters",
+        "cellular",
+        "bands",
+        "apn",
+        "hotspot",
+        "lan",
+        "clients",
+        "sms",
+        "settings"
+      ],
+      "deliverables": [
+        "GOFORM 直连与 KANO 代理共用官方接口实现",
+        "补齐每卡状态与高级字段",
+        "写入前预览、断网恢复、回读与部分失败"
+      ],
+      "doneWhen": "每个已支持动作都有协议样本及独立结果；无未经确认的设备写入"
+    },
+    {
+      "id": "P3",
+      "name": "KANO 工具与运维功能",
+      "depends": [
+        "P2"
+      ],
+      "sections": [
+        "usage",
+        "speed",
+        "terminal",
+        "proxy",
+        "usb",
+        "plugins",
+        "updates",
+        "appearance",
+        "location",
+        "forward",
+        "tasks"
+      ],
+      "deliverables": [
+        "测速与配置导入导出",
+        "OTA/文件上传进度与恢复",
+        "插件、主题、认证、转发、任务完整管理"
+      ],
+      "doneWhen": "可取消动作真正停止；不可取消阶段明确；设置保存后正确回读"
+    },
+    {
+      "id": "P4",
+      "name": "ZWRT / datad 接入与管理",
+      "depends": [
+        "P1"
+      ],
+      "sections": [
+        "remote",
+        "recovery",
+        "activity"
+      ],
+      "deliverables": [
+        "Bearer 鉴权、版本与能力发现",
+        "ZWRT 网络/短信/任务/流量/更新适配",
+        "NMS、官方后台避让、自动恢复与执行日志"
+      ],
+      "doneWhen": "在可用 datad 环境完成接入、失败恢复及写后回读；无环境仅可标协议测试"
+    },
+    {
+      "id": "P5",
+      "name": "信令采集与分析",
+      "depends": [
+        "P4"
+      ],
+      "sections": [
+        "capture"
+      ],
+      "deliverables": [
+        "流式连接与有界缓冲",
+        "RRC/NDJSON/原始帧视图与导出",
+        "小区/QoS/安全/指纹/功率/TA 来源关联"
+      ],
+      "doneWhen": "真实帧样本逐项对照；长时运行有界；未知字段原样保留，不臆测解码"
+    },
+    {
+      "id": "P6",
+      "name": "独立模式与 Linux 等价体验",
+      "depends": [
+        "P2"
+      ],
+      "sections": [
+        "autostart",
+        "about"
+      ],
+      "deliverables": [
+        "远程 Android Root/ABI/桥接工具部署向导",
+        "独立模式每卡管理与开机恢复",
+        "悬浮监控、托盘、外观、电脑自启；合法授权接口核验"
+      ],
+      "doneWhen": "授权和目标可验证；远程设备动作不在本机误执行；Android 专属项有等价说明"
+    },
+    {
+      "id": "P7",
+      "name": "全量回归与发行",
+      "depends": [
+        "P3",
+        "P5",
+        "P6"
+      ],
+      "sections": [],
+      "deliverables": [
+        "功能清单逐行复核",
+        "四模式固件矩阵与不支持说明",
+        "AppImage/tar.gz 验证、桌面安装与迁移指南"
+      ],
+      "doneWhen": "未闭合条目保留为未完成；只有通过完整验收才称功能对齐版"
+    }
+  ],
+  "features": [
+    {
+      "id": "overview.health",
+      "name": "温度、CPU、内存与存储",
+      "group": "overview",
+      "section": "dashboard",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "KANO",
+        "GOFORM",
+        "STANDALONE",
+        "ZWRT"
+      ],
+      "interaction": "page",
+      "acceptance": "缺失读数与零值区分；断线保留带时间戳的快照",
+      "evidence": [
+        {
+          "file": "v7/m73.java",
+          "pattern": "/api/baseDeviceInfo",
+          "line": 2541,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "overview.battery",
+      "name": "电量、电压、电流与充电状态",
+      "group": "overview",
+      "section": "dashboard",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "充电与放电单位统一；无电池机型说明不适用",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "电压 / 电流",
+          "line": 344,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "overview.identity",
+      "name": "型号、固件、运行时间与卡信息",
+      "group": "overview",
+      "section": "dashboard",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "drawer",
+      "acceptance": "标识字段可复制；默认遮挡敏感号码",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "当前数据卡",
+          "line": 399,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "overview.rates",
+      "name": "实时上传下载及会话采样",
+      "group": "overview",
+      "section": "dashboard",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "page",
+      "acceptance": "切换设备清空会话曲线；采样空洞不补零",
+      "evidence": [
+        {
+          "file": "v7/rj0.java",
+          "pattern": "realtime_rx_thrpt",
+          "line": 108,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "overview.quick",
+      "name": "蜂窝、Wi-Fi、短信快捷入口",
+      "group": "overview",
+      "section": "dashboard",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "快捷入口进入相同领域操作；不产生第二套逻辑",
+      "evidence": [
+        {
+          "file": "v7/o83.java",
+          "pattern": "Wi-Fi",
+          "line": 819,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "params.signal",
+      "name": "NR/LTE 信号与详细参数",
+      "group": "overview",
+      "section": "parameters",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "page",
+      "acceptance": "字段单位与来源可见；不同模式不得互相套用原始字段",
+      "evidence": [
+        {
+          "file": "v7/rj0.java",
+          "pattern": "Nr_snr",
+          "line": 109,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "params.carriers",
+      "name": "载波聚合、PCC/SCC 与频段带宽",
+      "group": "overview",
+      "section": "parameters",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "drawer",
+      "acceptance": "配置状态、激活状态与尚未上报分别显示",
+      "evidence": [
+        {
+          "file": "v7/wm.java",
+          "pattern": "已上报载波",
+          "line": 268,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "params.provenance",
+      "name": "参数来源、采样时间与同小区关联",
+      "group": "overview",
+      "section": "parameters",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "drawer",
+      "acceptance": "展示原始字段、来源与样本时间；不混合不同小区",
+      "evidence": [
+        {
+          "file": "v7/fk1.java",
+          "pattern": "点按参数查看来源",
+          "line": 773,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "params.ta",
+      "name": "TA 距离估算",
+      "group": "overview",
+      "section": "parameters",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT",
+        "verify"
+      ],
+      "interaction": "drawer",
+      "acceptance": "注明估算及步长，不能当作地图直线距离",
+      "evidence": [
+        {
+          "file": "v7/ab3.java",
+          "pattern": "TA 估算距离",
+          "line": 42,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "usage.daily",
+      "name": "今日、本月与区间统计",
+      "group": "overview",
+      "section": "usage",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "设备日期边界明确；缺失日期不计零",
+      "evidence": [
+        {
+          "file": "v7/fk1.java",
+          "pattern": "流量管理",
+          "line": 3087,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "usage.chart",
+      "name": "按日折线、日期区间选择",
+      "group": "overview",
+      "section": "usage",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "图表与列表同一数据；空值段落保持断点",
+      "evidence": [
+        {
+          "file": "v7/i83.java",
+          "pattern": "按日折线",
+          "line": 166,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "usage.limit",
+      "name": "流量限额、统计口径与提醒",
+      "group": "overview",
+      "section": "usage",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "变更摘要显示周期、单位、影响；结果回读",
+      "evidence": [
+        {
+          "file": "v7/f22.java",
+          "pattern": "启用限额",
+          "line": 532,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "usage.calibration",
+      "name": "原厂流量校准与清零日期",
+      "group": "overview",
+      "section": "usage",
+      "status": "research",
+      "statusLabel": "协议或范围待核实",
+      "modes": [
+        "KANO",
+        "GOFORM"
+      ],
+      "interaction": "inline",
+      "acceptance": "核实 APK 实际入口与原厂参数后再接入，不用额外功能冒充 APK 证据",
+      "evidence": [
+        {
+          "file": "v7/rj0.java",
+          "pattern": "monthly_rx_bytes",
+          "line": 108,
+          "matched": true,
+          "basis": "关联页证据，具体入口仍待核实"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "location.position",
+      "name": "设备坐标、精度与刷新",
+      "group": "overview",
+      "section": "location",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "坐标系、精度、来源时间可见；拒绝无效坐标",
+      "evidence": [
+        {
+          "file": "v7/mh0.java",
+          "pattern": "设备定位",
+          "line": 226,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "location.map",
+      "name": "外部地图查看位置",
+      "group": "overview",
+      "section": "location",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "跳转前说明发送坐标的目标；仅允许 HTTP(S) 地图地址",
+      "evidence": [
+        {
+          "file": "v7/a40.java",
+          "pattern": "打开 OSM",
+          "line": 78,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "location.beep",
+      "name": "播放设备提示音",
+      "group": "overview",
+      "section": "location",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "明确目标设备；操作完成和不支持有独立反馈",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "播放提示音",
+          "line": 87,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "cellular.mode",
+      "name": "自动、4G、5G SA/NSA 网络制式",
+      "group": "network",
+      "section": "cellular",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "confirm",
+      "acceptance": "预览旧值新值；断网后恢复连接并回读",
+      "evidence": [
+        {
+          "file": "v7/rj0.java",
+          "pattern": "SET_BEARER_PREFERENCE",
+          "line": 3548,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.data",
+      "name": "蜂窝连接与断开",
+      "group": "network",
+      "section": "cellular",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "手动断开须暂停自动恢复，避免立即被反向操作",
+      "evidence": [
+        {
+          "file": "v7/fk1.java",
+          "pattern": "蜂窝网络",
+          "line": 965,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.sim",
+      "name": "双卡、默认数据卡与卡槽切换",
+      "group": "network",
+      "section": "cellular",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "confirm",
+      "acceptance": "以设备返回卡槽映射显示，不固定猜测 SIM1/2 编号",
+      "evidence": [
+        {
+          "file": "v7/fk1.java",
+          "pattern": "切换数据卡",
+          "line": 1295,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.voice",
+      "name": "每卡 VoLTE / VoNR",
+      "group": "network",
+      "section": "cellular",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "切换槽位先读该槽位状态；写入时传正确 slot",
+      "evidence": [
+        {
+          "file": "v7/f22.java",
+          "pattern": "高清语音",
+          "line": 437,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.endc",
+      "name": "ENDC 开关",
+      "group": "network",
+      "section": "cellular",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "读写状态与实际后端支持一致",
+      "evidence": [
+        {
+          "file": "v7/sm.java",
+          "pattern": "ENDC 已更新",
+          "line": 99,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.dataPriority",
+      "name": "基带数据业务优先",
+      "group": "network",
+      "section": "cellular",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "枚举和值域从对应模式核实",
+      "evidence": [
+        {
+          "file": "v7/sm.java",
+          "pattern": "数据业务优先已更新",
+          "line": 102,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.roaming",
+      "name": "数据漫游",
+      "group": "network",
+      "section": "cellular",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "开关、费用影响和回读结果明确",
+      "evidence": [
+        {
+          "file": "v7/xq4.java",
+          "pattern": "数据漫游",
+          "line": 10,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "cellular.feline",
+      "name": "肥猫卡运营商切换",
+      "group": "network",
+      "section": "cellular",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "stepper",
+      "acceptance": "读取当前卡与运营商；只展示该卡支持的选项",
+      "evidence": [
+        {
+          "file": "v7/qa0.java",
+          "pattern": "肥猫运营商切换",
+          "line": 2100,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "bands.read",
+      "name": "支持频段、当前锁频与选择",
+      "group": "network",
+      "section": "bands",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "page",
+      "acceptance": "可搜索频段列表；未知支持列表不伪装为全支持",
+      "evidence": [
+        {
+          "file": "v7/zb2.java",
+          "pattern": "NR_BAND_LOCK",
+          "line": 1014,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "bands.write",
+      "name": "4G/5G 锁频、分别/全部解锁",
+      "group": "network",
+      "section": "bands",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "confirm",
+      "acceptance": "分项结果和回读；部分成功不得显示全成功",
+      "evidence": [
+        {
+          "file": "v7/zb2.java",
+          "pattern": "LTE_BAND_LOCK",
+          "line": 1014,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "bands.neighbors",
+      "name": "邻区与已锁小区",
+      "group": "network",
+      "section": "bands",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "制式、频点、PCI 不缺失时可发起锁定",
+      "evidence": [
+        {
+          "file": "v7/zb2.java",
+          "pattern": "earfcn",
+          "line": 406,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "bands.lock",
+      "name": "选择邻区或手动输入锁小区",
+      "group": "network",
+      "section": "bands",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "drawer",
+      "acceptance": "填入邻区参数，确认具体目标；LTE/NR PCI 范围不同",
+      "evidence": [
+        {
+          "file": "v7/zb2.java",
+          "pattern": "CELL_LOCK",
+          "line": 1282,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "bands.unlock",
+      "name": "解锁全部小区",
+      "group": "network",
+      "section": "bands",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "confirm",
+      "acceptance": "成功后回读锁记录，保持结果可追溯",
+      "evidence": [
+        {
+          "file": "v7/zb2.java",
+          "pattern": "UNLOCK_ALL_CELL",
+          "line": 2142,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "apn.list",
+      "name": "按卡读取 APN 与默认项",
+      "group": "network",
+      "section": "apn",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "page",
+      "acceptance": "不同卡分开；权限不足时禁止不安全修改已有项",
+      "evidence": [
+        {
+          "file": "v7/nf.java",
+          "pattern": "APN_config",
+          "line": 601,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "apn.edit",
+      "name": "新增/编辑 APN 基础与高级字段",
+      "group": "network",
+      "section": "apn",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "drawer",
+      "acceptance": "覆盖认证、PDP、代理/彩信/服务字段；保留未知字段",
+      "evidence": [
+        {
+          "file": "v7/be.java",
+          "pattern": "代理 / 服务器",
+          "line": 292,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "apn.mode",
+      "name": "自动/手动、设默认与删除",
+      "group": "network",
+      "section": "apn",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "confirm",
+      "acceptance": "禁用不满足 default 类型的配置；删除后回读",
+      "evidence": [
+        {
+          "file": "v7/nf.java",
+          "pattern": "apn_action",
+          "line": 454,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "wifi.state",
+      "name": "热点开关与当前连接状态",
+      "group": "network",
+      "section": "hotspot",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "inline",
+      "acceptance": "支持单/双热点；热点重启有重连提示",
+      "evidence": [
+        {
+          "file": "v7/s34.java",
+          "pattern": "queryWiFiModuleSwitch",
+          "line": 2272,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "wifi.basic",
+      "name": "SSID、认证、口令、隐藏与上限",
+      "group": "network",
+      "section": "hotspot",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "inline",
+      "acceptance": "口令保持/替换/清除语义分开；按设备能力限值",
+      "evidence": [
+        {
+          "file": "v7/s34.java",
+          "pattern": "setAccessPointInfo",
+          "line": 2785,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "wifi.radio",
+      "name": "Wi-Fi 频段、芯片、信道与带宽",
+      "group": "network",
+      "section": "hotspot",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "频道由国家/频段能力生成，不给固定万能选项",
+      "evidence": [
+        {
+          "file": "v7/wb1.java",
+          "pattern": "配置信道",
+          "line": 1030,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "wifi.isolation",
+      "name": "热点隔离与访客配置",
+      "group": "network",
+      "section": "hotspot",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "区分主热点和访客热点，按设备原值保存",
+      "evidence": [
+        {
+          "file": "v7/s34.java",
+          "pattern": "ApIsolate",
+          "line": 2862,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "wifi.boot",
+      "name": "热点开机自启与延迟",
+      "group": "network",
+      "section": "hotspot",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "STANDALONE",
+        "ZWRT",
+        "verify"
+      ],
+      "interaction": "inline",
+      "acceptance": "区分当前状态与下次开机生效，展示依赖",
+      "evidence": [
+        {
+          "file": "v7/ya1.java",
+          "pattern": "开机自启",
+          "line": 49,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "wifi.apply",
+      "name": "热点配置保存与重启恢复",
+      "group": "network",
+      "section": "hotspot",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "stepper",
+      "acceptance": "保存、重启、重连、回读分阶段显示",
+      "evidence": [
+        {
+          "file": "v7/wb1.java",
+          "pattern": "保存后重启热点",
+          "line": 1686,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "lan.address",
+      "name": "网关、DHCP、地址池与租约",
+      "group": "network",
+      "section": "lan",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "KANO",
+        "GOFORM",
+        "ZWRT"
+      ],
+      "interaction": "confirm",
+      "acceptance": "校验掩码与地址池；提供新地址连接动作",
+      "evidence": [
+        {
+          "file": "v7/d83.java",
+          "pattern": "LAN 设置",
+          "line": 105,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "lan.mtu",
+      "name": "MTU 与网络高级参数",
+      "group": "network",
+      "section": "lan",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "应用前验证后端范围，展示旧值",
+      "evidence": [
+        {
+          "file": "v7/d83.java",
+          "pattern": "MTU",
+          "line": 106,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "usb.mode",
+      "name": "USB 协议、仅 RNDIS 与恢复默认",
+      "group": "network",
+      "section": "lan",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "切换断开当前 USB 时有恢复步骤",
+      "evidence": [
+        {
+          "file": "v7/ub0.java",
+          "pattern": "恢复默认 USB 模式",
+          "line": 3218,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "clients.list",
+      "name": "Wi-Fi/有线终端与搜索排序",
+      "group": "network",
+      "section": "clients",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "分页与搜索不重置当前选择",
+      "evidence": [
+        {
+          "file": "v7/s34.java",
+          "pattern": "queryAccessPointInfo",
+          "line": 2036,
+          "matched": true,
+          "basis": "关联页证据，具体入口仍待核实"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "clients.rename",
+      "name": "终端别名修改",
+      "group": "network",
+      "section": "clients",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "KANO",
+        "GOFORM",
+        "verify"
+      ],
+      "interaction": "drawer",
+      "acceptance": "设备名、IP、MAC 同时呈现以识别对象",
+      "evidence": [
+        {
+          "file": "v7/o83.java",
+          "pattern": "设备管理",
+          "line": 834,
+          "matched": true,
+          "basis": "关联页证据，具体入口仍待核实"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "clients.acl",
+      "name": "接入黑白名单与移除",
+      "group": "network",
+      "section": "clients",
+      "status": "research",
+      "statusLabel": "协议或范围待核实",
+      "modes": [
+        "KANO",
+        "GOFORM",
+        "verify"
+      ],
+      "interaction": "drawer",
+      "acceptance": "核对 APK 入口；保存完整名单前检查并发修改",
+      "evidence": [
+        {
+          "file": "v7/s34.java",
+          "pattern": "queryAccessPointInfo",
+          "line": 2036,
+          "matched": true,
+          "basis": "关联页证据，具体入口仍待核实"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "sms.read",
+      "name": "收件箱、未读、搜索与分页",
+      "group": "messages",
+      "section": "sms",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "split",
+      "acceptance": "列表选择后右侧读内容；选中项不随轮询跳动",
+      "evidence": [
+        {
+          "file": "v7/va0.java",
+          "pattern": "确认删除该短信",
+          "line": 328,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "sms.compose",
+      "name": "新建、回复与发送结果",
+      "group": "messages",
+      "section": "sms",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "drawer",
+      "acceptance": "草稿按设备/SIM 隔离；明确计费与编码；提交不可自动重试",
+      "evidence": [
+        {
+          "file": "v7/wm.java",
+          "pattern": "SmsComposeScreen.kt",
+          "line": 33,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "sms.actions",
+      "name": "标记已读、删除与批量选择",
+      "group": "messages",
+      "section": "sms",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "confirm",
+      "acceptance": "批量操作有逐项结果；仅针对当前选择执行",
+      "evidence": [
+        {
+          "file": "v7/k71.java",
+          "pattern": "goform",
+          "line": 18,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "sms.slot",
+      "name": "接收模式、SIM 与通道选择",
+      "group": "messages",
+      "section": "sms",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "不同后端支持范围从能力表返回",
+      "evidence": [
+        {
+          "file": "v7/hf3.java",
+          "pattern": "/api/",
+          "line": 102,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "forward.channels",
+      "name": "SMTP、Webhook、钉钉与 curl",
+      "group": "messages",
+      "section": "forward",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "保留既有秘密；测试发送要显式操作并说明设备副作用",
+      "evidence": [
+        {
+          "file": "v7/o9.java",
+          "pattern": "SMTP / Webhook / 钉钉",
+          "line": 54,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "forward.filters",
+      "name": "号码/关键词黑名单与设备备注",
+      "group": "messages",
+      "section": "forward",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "显示匹配规则和长度限制，保存后回读",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "过滤与备注",
+          "line": 3053,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "forward.power",
+      "name": "电量与充电状态通知",
+      "group": "messages",
+      "section": "forward",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "明确触发阈值与是否有电池；不支持不显示假状态",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "电源状态通知",
+          "line": 2384,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "forward.test",
+      "name": "渠道测试、配额与送达状态",
+      "group": "messages",
+      "section": "forward",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "区分已提交、已接受、已送达、失败；不自动重复发送",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "今日剩余短信额度",
+          "line": 2329,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "activity.list",
+      "name": "通知/任务/网络恢复执行记录",
+      "group": "messages",
+      "section": "activity",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "split",
+      "acceptance": "过滤分类、展开详情，保留设备时间与状态",
+      "evidence": [
+        {
+          "file": "v7/d83.java",
+          "pattern": "通知与执行记录",
+          "line": 21,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "activity.clear",
+      "name": "清空分类或全部记录",
+      "group": "messages",
+      "section": "activity",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "confirm",
+      "acceptance": "清空记录不影响配置；确认明确不可恢复",
+      "evidence": [
+        {
+          "file": "v7/xg3.java",
+          "pattern": "所有分类的通知",
+          "line": 630,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "speed.local",
+      "name": "电脑到设备的内网测速",
+      "group": "tools",
+      "section": "speed",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "job",
+      "acceptance": "标注测的是局域网链路；停止关闭所有请求",
+      "evidence": [
+        {
+          "file": "v7/th3.java",
+          "pattern": "内网测速",
+          "line": 219,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "speed.cellular",
+      "name": "通过设备代理的外网测速",
+      "group": "tools",
+      "section": "speed",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO",
+        "verify"
+      ],
+      "interaction": "job",
+      "acceptance": "路径、消耗流量、测试地址可见；绝不混为电脑直连测速",
+      "evidence": [
+        {
+          "file": "v7/rh3.java",
+          "pattern": "测速文件 URL",
+          "line": 162,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "speed.full",
+      "name": "跑满了吗：下载/上传/双向并发",
+      "group": "tools",
+      "section": "speed",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "verify"
+      ],
+      "interaction": "job",
+      "acceptance": "速率、总量、持续时间、线程和停止语义准确",
+      "evidence": [
+        {
+          "file": "v7/a31.java",
+          "pattern": "FullSpeedScreen.kt",
+          "line": 46,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "speed.config",
+      "name": "测速方案导入、编辑、导出与分享",
+      "group": "tools",
+      "section": "speed",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "drawer",
+      "acceptance": "兼容原配置 schema，校验 URL；分享由用户显式触发",
+      "evidence": [
+        {
+          "file": "v7/mh3.java",
+          "pattern": "SPEED_TEST_CONFIG",
+          "line": 14,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "capture.stream",
+      "name": "连接、鉴权、启动、暂停与停止信令流",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "job",
+      "acceptance": "解析分片流；取消真正断开流；缓冲与内存有上限",
+      "evidence": [
+        {
+          "file": "v7/xk4.java",
+          "pattern": "信令接口",
+          "line": 1526,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.filter",
+      "name": "按名称/十六进制码/内容分类过滤",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "split",
+      "acceptance": "持续写入时保持选中行与滚动定位",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "按信令名",
+          "line": 7409,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.records",
+      "name": "原始帧、十六进制与 NDJSON 完整记录",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT",
+        "local"
+      ],
+      "interaction": "drawer",
+      "acceptance": "保留原始载荷、时间与解码来源，避免丢字段",
+      "evidence": [
+        {
+          "file": "v7/qa0.java",
+          "pattern": "NDJSON 完整记录",
+          "line": 2402,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.rrc",
+      "name": "RRC ASN.1 树与测量结果",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT",
+        "local"
+      ],
+      "interaction": "split",
+      "acceptance": "未知字段保留；解码失败仍可查看原帧",
+      "evidence": [
+        {
+          "file": "v7/f6.java",
+          "pattern": "RrcTreeDialog.kt",
+          "line": 2255,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.cell",
+      "name": "服务小区、完整邻区与载波信息",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "状态与帧按同小区关联，过期帧有标签",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "当前服务小区",
+          "line": 8676,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.radio",
+      "name": "上行功率、链路质量与波束",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "单位、有效范围与测量下限说明清楚",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "上行功率明细",
+          "line": 8721,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.qos",
+      "name": "APN、EPS/PDU 承载与 QoS 流",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "split",
+      "acceptance": "未捕获建立消息不能伪造完整会话",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "APN / 承载 QoS",
+          "line": 8435,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.security",
+      "name": "安全算法与 IMS 信令",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "未知算法显示未解析，不做无依据判断",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "加密/完整性",
+          "line": 4204,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.fingerprint",
+      "name": "基站厂商指纹与证据",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "区分推断与事实，提供匹配规则与置信依据",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "基站厂商指纹",
+          "line": 8399,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.ta",
+      "name": "RAR TA 与距离/DRX 等派生分析",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "算法/单位/推导状态可检查，有真实帧回归样本",
+      "evidence": [
+        {
+          "file": "v7/ab3.java",
+          "pattern": "RAR 绝对 TA",
+          "line": 41,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "capture.export",
+      "name": "JSON/NDJSON 导出、清空与重拨补抓",
+      "group": "tools",
+      "section": "capture",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "job",
+      "acceptance": "导出不中断采集；清空需确认；重拨保留抓取",
+      "evidence": [
+        {
+          "file": "v7/ra3.java",
+          "pattern": "导出抓取数据",
+          "line": 8706,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P5"
+    },
+    {
+      "id": "terminal.at",
+      "name": "每卡 AT 指令、预设与历史",
+      "group": "tools",
+      "section": "terminal",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "page",
+      "acceptance": "选择 SIM；保留输出；支持取消与超时结果未知",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "SIM1/2 指令终端",
+          "line": 162,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "terminal.shell",
+      "name": "普通/Root Shell 与输出复制",
+      "group": "tools",
+      "section": "terminal",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "区分远程命令权限；不在 Linux 主机执行设备命令",
+      "evidence": [
+        {
+          "file": "v7/o83.java",
+          "pattern": "Root Shell",
+          "line": 852,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "terminal.oneclick",
+      "name": "一键工程 Shell",
+      "group": "tools",
+      "section": "terminal",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "job",
+      "acceptance": "步骤与运行目标清楚；不把超时当作未执行",
+      "evidence": [
+        {
+          "file": "v7/a40.java",
+          "pattern": "one_click_shell.sh",
+          "line": 475,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "terminal.ttyd",
+      "name": "TTYD 存活检测与独立终端窗口",
+      "group": "tools",
+      "section": "terminal",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "window",
+      "acceptance": "远程页无本地 Node/IPC 权限",
+      "evidence": [
+        {
+          "file": "v7/ub0.java",
+          "pattern": "TTYD 网页终端",
+          "line": 3423,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "proxy.request",
+      "name": "HTTP 代理方法、URL、头、请求体",
+      "group": "tools",
+      "section": "proxy",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "split",
+      "acceptance": "明确从设备发起；敏感头默认不进日志；响应为文本展示",
+      "evidence": [
+        {
+          "file": "v7/nr2.java",
+          "pattern": "HTTP 代理调试",
+          "line": 95,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "usb.inspect",
+      "name": "USB 树、Host 模式、接口与速率",
+      "group": "tools",
+      "section": "usb",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "page",
+      "acceptance": "非 Host 不显示空树为硬件故障；设备详情可展开",
+      "evidence": [
+        {
+          "file": "v7/f6.java",
+          "pattern": "当前不是 Host 模式",
+          "line": 2156,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "tasks.list",
+      "name": "任务列表、详情与运行状态",
+      "group": "automation",
+      "section": "tasks",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "KANO",
+        "ZWRT"
+      ],
+      "interaction": "split",
+      "acceptance": "区分设备调度和桌面本地调度",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "定时任务",
+          "line": 40,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "tasks.basic",
+      "name": "重启、网络、Wi-Fi 等定时动作",
+      "group": "automation",
+      "section": "tasks",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "KANO",
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "设备时区、重复规则、任务 ID 冲突可见",
+      "evidence": [
+        {
+          "file": "v7/ot3.java",
+          "pattern": "/api/add_task",
+          "line": 90,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "tasks.advanced",
+      "name": "定时短信、Shell、AT、锁频等",
+      "group": "automation",
+      "section": "tasks",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT",
+        "capability"
+      ],
+      "interaction": "drawer",
+      "acceptance": "按后端动作 schema 构造；危险/收费动作明确预览",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "定时执行 Shell",
+          "line": 41,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "tasks.manage",
+      "name": "编辑、删除、清空与结果日志",
+      "group": "automation",
+      "section": "tasks",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "KANO",
+        "ZWRT"
+      ],
+      "interaction": "confirm",
+      "acceptance": "单项失败保持其余结果；清空不误删客户端提醒",
+      "evidence": [
+        {
+          "file": "v7/hu3.java",
+          "pattern": "确认清空所有定时任务",
+          "line": 1028,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "recovery.config",
+      "name": "检测地址、失败阈值、冷却、重拨上限",
+      "group": "automation",
+      "section": "recovery",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "inline",
+      "acceptance": "两个目标失败才累计；参数上下限来自设备",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "检测与重新拨号",
+          "line": 1944,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "recovery.reboot",
+      "name": "拨号失败后重启与限频",
+      "group": "automation",
+      "section": "recovery",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "confirm",
+      "acceptance": "不得绕过设备的每小时/每轮限额",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "每 6 小时最多",
+          "line": 2021,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "recovery.lifecycle",
+      "name": "开始、暂停、恢复、手动断网互斥",
+      "group": "automation",
+      "section": "recovery",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "inline",
+      "acceptance": "手动操作/配置修改取消自动恢复；状态回读",
+      "evidence": [
+        {
+          "file": "v7/ch3.java",
+          "pattern": "恢复自动检测",
+          "line": 1718,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "boot.standalone",
+      "name": "独立模式服务安装、启用、状态",
+      "group": "automation",
+      "section": "autostart",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "STANDALONE"
+      ],
+      "interaction": "stepper",
+      "acceptance": "远程 Android 目标/ABI/Root/签名校验明确；不安装 ARM 程序到 Linux 主机",
+      "evidence": [
+        {
+          "file": "v7/gg3.java",
+          "pattern": "独立模式自启动模块",
+          "line": 592,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "boot.replay",
+      "name": "开机恢复记录、删除与全部取消",
+      "group": "automation",
+      "section": "autostart",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "STANDALONE"
+      ],
+      "interaction": "split",
+      "acceptance": "仅修改下次开机动作，不偷偷修改当前设备状态",
+      "evidence": [
+        {
+          "file": "v7/gg3.java",
+          "pattern": "已保存的开机动作",
+          "line": 1734,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "boot.plugin",
+      "name": "UFI-TOOLS 插件脚本自启动",
+      "group": "automation",
+      "section": "autostart",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "inline",
+      "acceptance": "显示脚本来源、启动条件与当前状态",
+      "evidence": [
+        {
+          "file": "v7/jx.java",
+          "pattern": "ufi_tools_boot.sh",
+          "line": 426,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "boot.tether",
+      "name": "以太网/USB 共享守护与开机启动",
+      "group": "automation",
+      "section": "autostart",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "STANDALONE",
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "说明守护运行在设备；停止守护不关闭共享",
+      "evidence": [
+        {
+          "file": "v7/qv0.java",
+          "pattern": "以太网与 USB",
+          "line": 411,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "devices.profiles",
+      "name": "保存、编辑、切换与忘记设备",
+      "group": "system",
+      "section": "devices",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "all"
+      ],
+      "interaction": "drawer",
+      "acceptance": "切换成功后才替换旧会话；每设备草稿/缓存隔离",
+      "evidence": [
+        {
+          "file": "v7/o83.java",
+          "pattern": "忘记设备",
+          "line": 759,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "devices.discovery",
+      "name": "地址探测、默认服务与自动识别",
+      "group": "system",
+      "section": "devices",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "stepper",
+      "acceptance": "只探测用户指定网络范围；取消立即停止",
+      "evidence": [
+        {
+          "file": "v7/qw1.java",
+          "pattern": "/api/version_info",
+          "line": 48,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "devices.modes",
+      "name": "KANO / GOFORM / STANDALONE / ZWRT",
+      "group": "system",
+      "section": "devices",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "stepper",
+      "acceptance": "四种模式分别有接入、鉴权、能力探测与连接测试",
+      "evidence": [
+        {
+          "file": "v7/gm.java",
+          "pattern": "STANDALONE",
+          "line": 22,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "devices.auth",
+      "name": "UFI/原厂/datad 凭据与合法授权",
+      "group": "system",
+      "section": "devices",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "all"
+      ],
+      "interaction": "drawer",
+      "acceptance": "秘密在主进程密钥环；会话不跨地址复用",
+      "evidence": [
+        {
+          "file": "v7/j71.java",
+          "pattern": "LOGIN",
+          "line": 585,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "settings.nickname",
+      "name": "设备别名与技术信息",
+      "group": "system",
+      "section": "settings",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "区分本地连接名与设备别名",
+      "evidence": [
+        {
+          "file": "v7/bb0.java",
+          "pattern": "昵称（留空",
+          "line": 1739,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "settings.power",
+      "name": "重启、关机与原厂定时重启",
+      "group": "system",
+      "section": "settings",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "confirm",
+      "acceptance": "按设备支持提供操作，关机说明无法远程开机",
+      "evidence": [
+        {
+          "file": "v7/wh3.java",
+          "pattern": "关机后无法远程开机",
+          "line": 2893,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "settings.toggles",
+      "name": "性能、指示灯、SMB、日志、唤醒锁",
+      "group": "system",
+      "section": "settings",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "KANO",
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "仅变化项提交；组合操作有分项结果",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "设备信息",
+          "line": 52,
+          "matched": true,
+          "basis": "关联页证据，具体入口仍待核实"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "settings.nfc",
+      "name": "NFC、自动休眠与机型专用开关",
+      "group": "system",
+      "section": "settings",
+      "status": "research",
+      "statusLabel": "协议或范围待核实",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "APK 调用路径和设备能力核实后开放",
+      "evidence": [
+        {
+          "file": "v7/j83.java",
+          "pattern": "设备信息",
+          "line": 52,
+          "matched": true,
+          "basis": "关联页证据，具体入口仍待核实"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "settings.adb",
+      "name": "无线 ADB 自启、存活与 USB 调试",
+      "group": "system",
+      "section": "settings",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "KANO",
+        "capability"
+      ],
+      "interaction": "inline",
+      "acceptance": "展示共享凭据被写入/清除的实际副作用",
+      "evidence": [
+        {
+          "file": "v7/f22.java",
+          "pattern": "当前存活",
+          "line": 89,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "settings.password",
+      "name": "UFI 管理口令与原厂认证设置",
+      "group": "system",
+      "section": "settings",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "capability"
+      ],
+      "interaction": "stepper",
+      "acceptance": "新口令验证、会话重建、保存凭据更新构成一条流程",
+      "evidence": [
+        {
+          "file": "v7/f22.java",
+          "pattern": "修改登录口令",
+          "line": 358,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P2"
+    },
+    {
+      "id": "plugins.market",
+      "name": "官方/自定义仓库与目录管理",
+      "group": "system",
+      "section": "plugins",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "page",
+      "acceptance": "仓库错误与空目录不同；不向第三方转发设备凭据",
+      "evidence": [
+        {
+          "file": "v7/w21.java",
+          "pattern": "资源服务器配置",
+          "line": 205,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "plugins.edit",
+      "name": "已装插件添加/编辑/排序/删除",
+      "group": "system",
+      "section": "plugins",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "split",
+      "acceptance": "可单独管理代码块；原始文本无损；冲突检测与备份",
+      "evidence": [
+        {
+          "file": "v7/o83.java",
+          "pattern": "插件管理",
+          "line": 852,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "plugins.install",
+      "name": "源码预览、追加安装与结果",
+      "group": "system",
+      "section": "plugins",
+      "status": "existing",
+      "statusLabel": "已有实现，待完整对齐",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "drawer",
+      "acceptance": "源代码不在主界面执行；后端接受与实际生效分开",
+      "evidence": [
+        {
+          "file": "v7/o83.java",
+          "pattern": "列表 / 添加 / 市场",
+          "line": 852,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "updates.ufi",
+      "name": "UFI-TOOLS 检查、下载、进度、安装",
+      "group": "system",
+      "section": "updates",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "stepper",
+      "acceptance": "状态持久化；重连继续观察；不可取消阶段明确",
+      "evidence": [
+        {
+          "file": "v7/jx.java",
+          "pattern": "检查设备资源服务器",
+          "line": 161,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "updates.datad",
+      "name": "datad 更新源、自动更新与手动安装",
+      "group": "system",
+      "section": "updates",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "stepper",
+      "acceptance": "版本、来源、安装条件、服务重启恢复完整呈现",
+      "evidence": [
+        {
+          "file": "v7/up4.java",
+          "pattern": "空闲时自动更新",
+          "line": 44,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "updates.desktop",
+      "name": "Linux 客户端版本与更新说明",
+      "group": "system",
+      "section": "updates",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "page",
+      "acceptance": "区分设备服务更新与本机客户端更新",
+      "evidence": [
+        {
+          "file": "v7/hx.java",
+          "pattern": "软件更新",
+          "line": 299,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "appearance.device",
+      "name": "设备 Web 主题、背景、模糊与颜色",
+      "group": "system",
+      "section": "appearance",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "inline",
+      "acceptance": "设备主题与客户端主题独立，不影响原生工具可读性",
+      "evidence": [
+        {
+          "file": "v7/f22.java",
+          "pattern": "主题配置",
+          "line": 158,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "appearance.files",
+      "name": "背景/文件上传、预览、单项/全部删除",
+      "group": "system",
+      "section": "appearance",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "KANO"
+      ],
+      "interaction": "drawer",
+      "acceptance": "上传进度/大小/类型校验；远端资源不作为本地脚本执行",
+      "evidence": [
+        {
+          "file": "v7/f22.java",
+          "pattern": "已上传文件",
+          "line": 324,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P3"
+    },
+    {
+      "id": "remote.nms",
+      "name": "NMS 接入码、凭据、状态与上报间隔",
+      "group": "system",
+      "section": "remote",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "stepper",
+      "acceptance": "接入码当作秘密；失败不覆盖有效配置",
+      "evidence": [
+        {
+          "file": "v7/bi3.java",
+          "pattern": "NMS 远程管理",
+          "line": 2327,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "remote.tls",
+      "name": "系统证书、自定义 CA 与备用地址",
+      "group": "system",
+      "section": "remote",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "默认验证证书；导入 CA 显示来源和适用目标",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "证书与备用地址",
+          "line": 1376,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "remote.web",
+      "name": "添加远程后台与访问控制",
+      "group": "system",
+      "section": "remote",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "drawer",
+      "acceptance": "目标与权限明确；独立远程窗口隔离",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "添加后台",
+          "line": 1324,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "remote.oem",
+      "name": "官方后台避让、倒计时与手动恢复",
+      "group": "system",
+      "section": "remote",
+      "status": "missing",
+      "statusLabel": "待实现",
+      "modes": [
+        "ZWRT"
+      ],
+      "interaction": "inline",
+      "acceptance": "避让期间暂停自动登录/恢复；倒计时到点回读确认",
+      "evidence": [
+        {
+          "file": "v7/d83.java",
+          "pattern": "官方后台避让",
+          "line": 165,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P4"
+    },
+    {
+      "id": "app.theme",
+      "name": "明暗主题、强调色与系统取色等价",
+      "group": "system",
+      "section": "app",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "inline",
+      "acceptance": "Linux 主题可用性探测；不依赖 Android Monet",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "动态取色",
+          "line": 190,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "app.scale",
+      "name": "界面大小、密度与窗口布局",
+      "group": "system",
+      "section": "app",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "inline",
+      "acceptance": "缩放后按钮仍可达；最小窗口及高 DPI 验收",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "界面大小",
+          "line": 217,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "app.refresh",
+      "name": "刷新周期、记住登录与重连策略",
+      "group": "system",
+      "section": "app",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "inline",
+      "acceptance": "监控与编辑刷新分开；后台节流不丢长任务",
+      "evidence": [
+        {
+          "file": "v7/sh.java",
+          "pattern": "实时刷新",
+          "line": 256,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P1"
+    },
+    {
+      "id": "app.widget",
+      "name": "小组件字段、顺序、外观与刷新",
+      "group": "system",
+      "section": "app",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "drawer",
+      "acceptance": "Linux 托盘详情/可选悬浮监控实现同等信息功能",
+      "evidence": [
+        {
+          "file": "v7/ai4.java",
+          "pattern": "选择下方字段",
+          "line": 296,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "app.background",
+      "name": "后台驻留、自动启动与通知",
+      "group": "system",
+      "section": "app",
+      "status": "equivalent",
+      "statusLabel": "需 Linux 等价实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "inline",
+      "acceptance": "区分电脑自启与设备自启，用户可彻底退出",
+      "evidence": [
+        {
+          "file": "v7/hx.java",
+          "pattern": "小组件",
+          "line": 288,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "about.privacy",
+      "name": "关于、隐私、更新日志与组件许可",
+      "group": "system",
+      "section": "about",
+      "status": "partial",
+      "statusLabel": "部分实现",
+      "modes": [
+        "local"
+      ],
+      "interaction": "page",
+      "acceptance": "列出本客户端真实数据流与许可证，不冒称官方发行",
+      "evidence": [
+        {
+          "file": "v7/c32.java",
+          "pattern": "更新日志",
+          "line": 29,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    },
+    {
+      "id": "about.activation",
+      "name": "独立模式试用、设备码与合法激活入口",
+      "group": "system",
+      "section": "about",
+      "status": "research",
+      "statusLabel": "协议或范围待核实",
+      "modes": [
+        "STANDALONE"
+      ],
+      "interaction": "stepper",
+      "acceptance": "先确认官方服务是否允许 Linux 客户端；不伪造授权、不绕过校验",
+      "evidence": [
+        {
+          "file": "v7/tl3.java",
+          "pattern": "独立模式需要激活",
+          "line": 43,
+          "matched": true,
+          "basis": "页面、菜单或协议字面量证据"
+        }
+      ],
+      "verification": {
+        "ui": false,
+        "contract": false,
+        "deviceRead": false,
+        "deviceWriteReadback": false
+      },
+      "notes": "此处状态是 0.3.0 的迁移基线；验收标记需在后续实现中逐项记录。",
+      "phase": "P6"
+    }
+  ],
+  "screens": {
+    "AboutScreen": [
+      {
+        "file": "v7/t02.java",
+        "line": 237
+      },
+      {
+        "file": "v7/z73.java",
+        "line": 24
+      },
+      {
+        "file": "v7/p20.java",
+        "line": 341
+      },
+      {
+        "file": "v7/k.java",
+        "line": 395
+      }
+    ],
+    "ApnEditScreen": [
+      {
+        "file": "v7/be.java",
+        "line": 34
+      },
+      {
+        "file": "v7/xr1.java",
+        "line": 379
+      },
+      {
+        "file": "v7/td.java",
+        "line": 449
+      },
+      {
+        "file": "v7/xd.java",
+        "line": 191
+      },
+      {
+        "file": "v7/ud.java",
+        "line": 191
+      }
+    ],
+    "ApnListScreen": [
+      {
+        "file": "v7/d6.java",
+        "line": 770
+      },
+      {
+        "file": "v7/p20.java",
+        "line": 390
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 324
+      },
+      {
+        "file": "v7/ye.java",
+        "line": 72
+      },
+      {
+        "file": "v7/ie.java",
+        "line": 37
+      },
+      {
+        "file": "v7/k.java",
+        "line": 28
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 451
+      },
+      {
+        "file": "v7/bu3.java",
+        "line": 312
+      }
+    ],
+    "AppSettingsScreen": [
+      {
+        "file": "v7/xr1.java",
+        "line": 35
+      },
+      {
+        "file": "v7/td.java",
+        "line": 47
+      },
+      {
+        "file": "v7/hi.java",
+        "line": 30
+      },
+      {
+        "file": "v7/sh.java",
+        "line": 45
+      }
+    ],
+    "AtTerminalScreen": [
+      {
+        "file": "v7/f6.java",
+        "line": 2337
+      },
+      {
+        "file": "v7/p20.java",
+        "line": 400
+      },
+      {
+        "file": "v7/zk.java",
+        "line": 18
+      },
+      {
+        "file": "v7/wk.java",
+        "line": 47
+      },
+      {
+        "file": "v7/uk.java",
+        "line": 344
+      },
+      {
+        "file": "v7/i22.java",
+        "line": 820
+      }
+    ],
+    "BandScreen": [
+      {
+        "file": "v7/wn.java",
+        "line": 38
+      },
+      {
+        "file": "v7/xr1.java",
+        "line": 402
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 336
+      },
+      {
+        "file": "v7/um.java",
+        "line": 35
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 734
+      },
+      {
+        "file": "v7/sm.java",
+        "line": 45
+      },
+      {
+        "file": "v7/zm.java",
+        "line": 35
+      },
+      {
+        "file": "v7/tm.java",
+        "line": 51
+      },
+      {
+        "file": "v7/wm.java",
+        "line": 108
+      },
+      {
+        "file": "v7/rm.java",
+        "line": 57
+      }
+    ],
+    "CellLockProductScreen": [
+      {
+        "file": "v7/f6.java",
+        "line": 2384
+      },
+      {
+        "file": "v7/gk1.java",
+        "line": 1505
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 360
+      },
+      {
+        "file": "v7/jx.java",
+        "line": 284
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 754
+      },
+      {
+        "file": "v7/d22.java",
+        "line": 96
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 496
+      },
+      {
+        "file": "v7/ix.java",
+        "line": 33
+      },
+      {
+        "file": "v7/uk.java",
+        "line": 34
+      },
+      {
+        "file": "v7/hx.java",
+        "line": 469
+      }
+    ],
+    "ConnectScreen": [
+      {
+        "file": "v7/p20.java",
+        "line": 17
+      },
+      {
+        "file": "v7/vr2.java",
+        "line": 542
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 372
+      },
+      {
+        "file": "v7/n60.java",
+        "line": 27
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 302
+      },
+      {
+        "file": "v7/td.java",
+        "line": 196
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 26
+      },
+      {
+        "file": "v7/cn.java",
+        "line": 572
+      },
+      {
+        "file": "v7/j22.java",
+        "line": 29
+      }
+    ],
+    "DeviceLocationScreen": [
+      {
+        "file": "v7/mh0.java",
+        "line": 39
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 48
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 768
+      },
+      {
+        "file": "v7/xd.java",
+        "line": 211
+      },
+      {
+        "file": "v7/vm.java",
+        "line": 64
+      }
+    ],
+    "FelineCarrierSwitchScreen": [
+      {
+        "file": "v7/qa0.java",
+        "line": 1948
+      },
+      {
+        "file": "v7/pv0.java",
+        "line": 26
+      },
+      {
+        "file": "v7/gz1.java",
+        "line": 107
+      },
+      {
+        "file": "v7/nv0.java",
+        "line": 37
+      },
+      {
+        "file": "v7/qv0.java",
+        "line": 48
+      }
+    ],
+    "FullSpeedScreen": [
+      {
+        "file": "v7/a31.java",
+        "line": 46
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 90
+      },
+      {
+        "file": "v7/jx.java",
+        "line": 37
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 326
+      },
+      {
+        "file": "v7/qv0.java",
+        "line": 263
+      },
+      {
+        "file": "v7/i22.java",
+        "line": 40
+      },
+      {
+        "file": "v7/w21.java",
+        "line": 50
+      }
+    ],
+    "HomeScreen": [
+      {
+        "file": "v7/c32.java",
+        "line": 623
+      },
+      {
+        "file": "v7/ha1.java",
+        "line": 25
+      },
+      {
+        "file": "v7/a40.java",
+        "line": 203
+      },
+      {
+        "file": "v7/um.java",
+        "line": 240
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 351
+      },
+      {
+        "file": "v7/ea1.java",
+        "line": 22
+      },
+      {
+        "file": "v7/d32.java",
+        "line": 54
+      },
+      {
+        "file": "v7/ja1.java",
+        "line": 61
+      }
+    ],
+    "HotspotScreen": [
+      {
+        "file": "v7/wb1.java",
+        "line": 52
+      },
+      {
+        "file": "v7/za1.java",
+        "line": 38
+      },
+      {
+        "file": "v7/ya1.java",
+        "line": 31
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 58
+      },
+      {
+        "file": "v7/hx.java",
+        "line": 515
+      }
+    ],
+    "ImagePreviewDialog": [
+      {
+        "file": "v7/qa0.java",
+        "line": 2255
+      },
+      {
+        "file": "v7/me1.java",
+        "line": 22
+      }
+    ],
+    "NdjsonRecordDialog": [
+      {
+        "file": "v7/qa0.java",
+        "line": 2365
+      },
+      {
+        "file": "v7/g5.java",
+        "line": 35
+      },
+      {
+        "file": "v7/sa2.java",
+        "line": 39
+      },
+      {
+        "file": "v7/cn.java",
+        "line": 221
+      }
+    ],
+    "OtaScreen": [
+      {
+        "file": "v7/c32.java",
+        "line": 27
+      },
+      {
+        "file": "v7/va0.java",
+        "line": 5052
+      },
+      {
+        "file": "v7/n60.java",
+        "line": 58
+      },
+      {
+        "file": "v7/jx.java",
+        "line": 155
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 520
+      },
+      {
+        "file": "v7/fh2.java",
+        "line": 60
+      }
+    ],
+    "ParamsScreen": [
+      {
+        "file": "v7/c32.java",
+        "line": 50
+      },
+      {
+        "file": "v7/p20.java",
+        "line": 227
+      },
+      {
+        "file": "v7/ha1.java",
+        "line": 35
+      },
+      {
+        "file": "v7/va0.java",
+        "line": 42
+      },
+      {
+        "file": "v7/xr1.java",
+        "line": 165
+      },
+      {
+        "file": "v7/m90.java",
+        "line": 34
+      },
+      {
+        "file": "v7/z30.java",
+        "line": 17
+      },
+      {
+        "file": "v7/lj2.java",
+        "line": 34
+      },
+      {
+        "file": "v7/jx.java",
+        "line": 361
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 565
+      },
+      {
+        "file": "v7/bj2.java",
+        "line": 22
+      },
+      {
+        "file": "v7/d32.java",
+        "line": 77
+      },
+      {
+        "file": "v7/aj2.java",
+        "line": 34
+      },
+      {
+        "file": "v7/l9.java",
+        "line": 112
+      },
+      {
+        "file": "v7/jj2.java",
+        "line": 36
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 109
+      },
+      {
+        "file": "v7/px.java",
+        "line": 114
+      }
+    ],
+    "PrivacyScreen": [
+      {
+        "file": "v7/ma0.java",
+        "line": 1345
+      },
+      {
+        "file": "v7/is.java",
+        "line": 121
+      }
+    ],
+    "ProxyToolScreen": [
+      {
+        "file": "v7/p20.java",
+        "line": 251
+      },
+      {
+        "file": "v7/z30.java",
+        "line": 59
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 610
+      },
+      {
+        "file": "v7/ya1.java",
+        "line": 69
+      },
+      {
+        "file": "v7/fh2.java",
+        "line": 133
+      },
+      {
+        "file": "v7/nr2.java",
+        "line": 17
+      },
+      {
+        "file": "v7/hx.java",
+        "line": 64
+      }
+    ],
+    "RrcTreeDialog": [
+      {
+        "file": "v7/na0.java",
+        "line": 1141
+      },
+      {
+        "file": "v7/f6.java",
+        "line": 2255
+      },
+      {
+        "file": "v7/ty2.java",
+        "line": 226
+      },
+      {
+        "file": "v7/sy2.java",
+        "line": 23
+      }
+    ],
+    "SettingsScreen": [
+      {
+        "file": "v7/c32.java",
+        "line": 144
+      },
+      {
+        "file": "v7/xr1.java",
+        "line": 457
+      },
+      {
+        "file": "v7/m90.java",
+        "line": 46
+      },
+      {
+        "file": "v7/d83.java",
+        "line": 19
+      },
+      {
+        "file": "v7/o9.java",
+        "line": 51
+      },
+      {
+        "file": "v7/z30.java",
+        "line": 73
+      },
+      {
+        "file": "v7/j83.java",
+        "line": 28
+      },
+      {
+        "file": "v7/i83.java",
+        "line": 31
+      },
+      {
+        "file": "v7/o83.java",
+        "line": 20
+      },
+      {
+        "file": "v7/oz1.java",
+        "line": 56
+      },
+      {
+        "file": "v7/hx.java",
+        "line": 272
+      }
+    ],
+    "ShellScreen": [
+      {
+        "file": "v7/yb0.java",
+        "line": 1362
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 676
+      }
+    ],
+    "SignalCaptureScreen": [
+      {
+        "file": "v7/j43.java",
+        "line": 74
+      },
+      {
+        "file": "v7/p20.java",
+        "line": 584
+      },
+      {
+        "file": "v7/ty2.java",
+        "line": 47
+      },
+      {
+        "file": "v7/c40.java",
+        "line": 49
+      },
+      {
+        "file": "v7/ra3.java",
+        "line": 98
+      },
+      {
+        "file": "v7/da3.java",
+        "line": 22
+      },
+      {
+        "file": "v7/z30.java",
+        "line": 101
+      },
+      {
+        "file": "v7/na3.java",
+        "line": 43
+      },
+      {
+        "file": "v7/ow.java",
+        "line": 56
+      },
+      {
+        "file": "v7/k.java",
+        "line": 88
+      },
+      {
+        "file": "v7/z93.java",
+        "line": 29
+      },
+      {
+        "file": "v7/xd.java",
+        "line": 138
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 143
+      },
+      {
+        "file": "v7/ud.java",
+        "line": 128
+      },
+      {
+        "file": "v7/xm4.java",
+        "line": 73
+      }
+    ],
+    "SmsComposeScreen": [
+      {
+        "file": "v7/qa0.java",
+        "line": 4112
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 25
+      },
+      {
+        "file": "v7/d32.java",
+        "line": 319
+      },
+      {
+        "file": "v7/wm.java",
+        "line": 33
+      }
+    ],
+    "SmsForwardScreen": [
+      {
+        "file": "v7/ra0.java",
+        "line": 1222
+      },
+      {
+        "file": "v7/f22.java",
+        "line": 639
+      },
+      {
+        "file": "v7/xm.java",
+        "line": 47
+      },
+      {
+        "file": "v7/gh2.java",
+        "line": 245
+      },
+      {
+        "file": "v7/oz1.java",
+        "line": 163
+      },
+      {
+        "file": "v7/qv0.java",
+        "line": 320
+      }
+    ],
+    "SmsTabScreen": [
+      {
+        "file": "v7/j43.java",
+        "line": 174
+      },
+      {
+        "file": "v7/c32.java",
+        "line": 163
+      },
+      {
+        "file": "v7/ty2.java",
+        "line": 278
+      },
+      {
+        "file": "v7/c40.java",
+        "line": 59
+      },
+      {
+        "file": "v7/va0.java",
+        "line": 135
+      },
+      {
+        "file": "v7/sq.java",
+        "line": 62
+      },
+      {
+        "file": "v7/w42.java",
+        "line": 171
+      },
+      {
+        "file": "v7/me1.java",
+        "line": 67
+      },
+      {
+        "file": "v7/jf3.java",
+        "line": 28
+      },
+      {
+        "file": "v7/z42.java",
+        "line": 196
+      }
+    ],
+    "SpeedtestScreen": [
+      {
+        "file": "v7/th3.java",
+        "line": 20
+      },
+      {
+        "file": "v7/z30.java",
+        "line": 115
+      },
+      {
+        "file": "v7/pv0.java",
+        "line": 54
+      },
+      {
+        "file": "v7/jx.java",
+        "line": 215
+      },
+      {
+        "file": "v7/rh3.java",
+        "line": 158
+      }
+    ],
+    "StandaloneAutostartModuleScreen": [
+      {
+        "file": "v7/gg3.java",
+        "line": 219
+      },
+      {
+        "file": "v7/z30.java",
+        "line": 143
+      },
+      {
+        "file": "v7/s90.java",
+        "line": 30
+      },
+      {
+        "file": "v7/xd.java",
+        "line": 232
+      },
+      {
+        "file": "v7/qv0.java",
+        "line": 386
+      }
+    ],
+    "TimingAdvanceDistanceDialog": [
+      {
+        "file": "v7/th3.java",
+        "line": 556
+      },
+      {
+        "file": "v7/s6.java",
+        "line": 359
+      }
+    ],
+    "UfiToolsPluginAutostartScreen": [
+      {
+        "file": "v7/ch3.java",
+        "line": 750
+      },
+      {
+        "file": "v7/w42.java",
+        "line": 211
+      },
+      {
+        "file": "v7/jx.java",
+        "line": 412
+      },
+      {
+        "file": "v7/j9.java",
+        "line": 46
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 364
+      },
+      {
+        "file": "v7/ut3.java",
+        "line": 153
+      },
+      {
+        "file": "v7/x42.java",
+        "line": 222
+      },
+      {
+        "file": "v7/bu3.java",
+        "line": 152
+      }
+    ],
+    "UfiToolsWidget": [
+      {
+        "file": "v7/qa0.java",
+        "line": 1863
+      },
+      {
+        "file": "v7/c40.java",
+        "line": 172
+      },
+      {
+        "file": "v7/o84.java",
+        "line": 28
+      },
+      {
+        "file": "v7/j94.java",
+        "line": 22
+      },
+      {
+        "file": "v7/j84.java",
+        "line": 28
+      },
+      {
+        "file": "v7/c94.java",
+        "line": 30
+      },
+      {
+        "file": "v7/w84.java",
+        "line": 31
+      },
+      {
+        "file": "v7/k.java",
+        "line": 182
+      }
+    ],
+    "UsageScreen": [
+      {
+        "file": "v7/wb4.java",
+        "line": 25
+      },
+      {
+        "file": "v7/me1.java",
+        "line": 77
+      },
+      {
+        "file": "v7/ut3.java",
+        "line": 19
+      },
+      {
+        "file": "v7/xd.java",
+        "line": 253
+      },
+      {
+        "file": "v7/z42.java",
+        "line": 43
+      }
+    ],
+    "WidgetSettingsScreen": [
+      {
+        "file": "v7/ai4.java",
+        "line": 25
+      },
+      {
+        "file": "v7/d32.java",
+        "line": 427
+      },
+      {
+        "file": "v7/e32.java",
+        "line": 46
+      },
+      {
+        "file": "v7/hx.java",
+        "line": 382
+      },
+      {
+        "file": "v7/i22.java",
+        "line": 199
+      }
+    ],
+    "ZwrtActivityScreen": [
+      {
+        "file": "v7/xg3.java",
+        "line": 539
+      },
+      {
+        "file": "v7/nf0.java",
+        "line": 56
+      },
+      {
+        "file": "v7/sa2.java",
+        "line": 63
+      },
+      {
+        "file": "v7/wm4.java",
+        "line": 42
+      },
+      {
+        "file": "v7/f22.java",
+        "line": 673
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 101
+      },
+      {
+        "file": "v7/ut3.java",
+        "line": 41
+      },
+      {
+        "file": "v7/xm4.java",
+        "line": 49
+      }
+    ],
+    "ZwrtLanScreen": [
+      {
+        "file": "v7/gh3.java",
+        "line": 1333
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 129
+      },
+      {
+        "file": "v7/ut3.java",
+        "line": 63
+      },
+      {
+        "file": "v7/do4.java",
+        "line": 46
+      }
+    ],
+    "ZwrtNmsScreen": [
+      {
+        "file": "v7/bi3.java",
+        "line": 1166
+      },
+      {
+        "file": "v7/o9.java",
+        "line": 73
+      },
+      {
+        "file": "v7/f22.java",
+        "line": 759
+      },
+      {
+        "file": "v7/d32.java",
+        "line": 457
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 157
+      },
+      {
+        "file": "v7/do4.java",
+        "line": 541
+      },
+      {
+        "file": "v7/sh.java",
+        "line": 1104
+      }
+    ],
+    "ZwrtOemAccessScreen": [
+      {
+        "file": "v7/xg3.java",
+        "line": 949
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 185
+      },
+      {
+        "file": "v7/mp4.java",
+        "line": 44
+      },
+      {
+        "file": "v7/nv0.java",
+        "line": 92
+      }
+    ],
+    "ZwrtOtaScreen": [
+      {
+        "file": "v7/xd4.java",
+        "line": 1199
+      },
+      {
+        "file": "v7/td.java",
+        "line": 523
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 243
+      },
+      {
+        "file": "v7/up4.java",
+        "line": 41
+      },
+      {
+        "file": "v7/f52.java",
+        "line": 81
+      }
+    ],
+    "ZwrtRecoveryScreen": [
+      {
+        "file": "v7/c32.java",
+        "line": 524
+      },
+      {
+        "file": "v7/ch3.java",
+        "line": 1553
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 299
+      },
+      {
+        "file": "v7/ut3.java",
+        "line": 85
+      },
+      {
+        "file": "v7/x42.java",
+        "line": 279
+      },
+      {
+        "file": "v7/sh.java",
+        "line": 1858
+      }
+    ],
+    "ZwrtShellScreen": [
+      {
+        "file": "v7/fh3.java",
+        "line": 3482
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 17
+      }
+    ],
+    "ZwrtSmsForwardScreen": [
+      {
+        "file": "v7/gh3.java",
+        "line": 650
+      },
+      {
+        "file": "v7/e40.java",
+        "line": 20
+      },
+      {
+        "file": "v7/d40.java",
+        "line": 87
+      },
+      {
+        "file": "v7/xm4.java",
+        "line": 203
+      },
+      {
+        "file": "v7/sh.java",
+        "line": 2183
+      }
+    ],
+    "ZwrtTasksScreen": [
+      {
+        "file": "v7/c32.java",
+        "line": 778
+      },
+      {
+        "file": "v7/wh3.java",
+        "line": 617
+      },
+      {
+        "file": "v7/xr1.java",
+        "line": 482
+      },
+      {
+        "file": "v7/e40.java",
+        "line": 32
+      },
+      {
+        "file": "v7/d32.java",
+        "line": 745
+      },
+      {
+        "file": "v7/z93.java",
+        "line": 72
+      },
+      {
+        "file": "v7/yq4.java",
+        "line": 34
+      },
+      {
+        "file": "v7/do4.java",
+        "line": 582
+      },
+      {
+        "file": "v7/dx.java",
+        "line": 803
+      }
+    ],
+    "ZwrtUsageScreen": [
+      {
+        "file": "v7/bi3.java",
+        "line": 2621
+      },
+      {
+        "file": "v7/ty2.java",
+        "line": 309
+      },
+      {
+        "file": "v7/gr4.java",
+        "line": 64
+      },
+      {
+        "file": "v7/mr4.java",
+        "line": 20
+      },
+      {
+        "file": "v7/jr4.java",
+        "line": 28
+      },
+      {
+        "file": "v7/ut3.java",
+        "line": 264
+      },
+      {
+        "file": "v7/ir4.java",
+        "line": 56
+      }
+    ]
+  },
+  "endpoints": {
+    "/api/AT": [
+      {
+        "file": "v7/s34.java",
+        "line": 1806
+      }
+    ],
+    "/api/SELinux": [
+      {
+        "file": "v7/v62.java",
+        "line": 766
+      }
+    ],
+    "/api/adb_alive": [
+      {
+        "file": "v7/s34.java",
+        "line": 1566
+      }
+    ],
+    "/api/adb_wifi_setting": [
+      {
+        "file": "v7/s34.java",
+        "line": 1633
+      }
+    ],
+    "/api/add_task": [
+      {
+        "file": "v7/ot3.java",
+        "line": 90
+      }
+    ],
+    "/api/apn": [
+      {
+        "file": "v7/nf.java",
+        "line": 305
+      }
+    ],
+    "/api/apn/": [
+      {
+        "file": "v7/nf.java",
+        "line": 433
+      }
+    ],
+    "/api/apn/list": [
+      {
+        "file": "v7/nf.java",
+        "line": 1036
+      }
+    ],
+    "/api/baseDeviceInfo": [
+      {
+        "file": "v7/r.java",
+        "line": 31
+      },
+      {
+        "file": "v7/m73.java",
+        "line": 2541
+      },
+      {
+        "file": "v7/oi0.java",
+        "line": 248
+      }
+    ],
+    "/api/beep_my_device": [
+      {
+        "file": "v7/v62.java",
+        "line": 70
+      }
+    ],
+    "/api/cellularUsage": [
+      {
+        "file": "v7/v62.java",
+        "line": 1391
+      }
+    ],
+    "/api/check_update": [
+      {
+        "file": "v7/s34.java",
+        "line": 1873
+      }
+    ],
+    "/api/clear_task": [
+      {
+        "file": "v7/ot3.java",
+        "line": 157
+      }
+    ],
+    "/api/currentCellInfo": [
+      {
+        "file": "v7/oi0.java",
+        "line": 290
+      }
+    ],
+    "/api/delete_all_uploads_data": [
+      {
+        "file": "v7/v62.java",
+        "line": 219
+      }
+    ],
+    "/api/delete_img": [
+      {
+        "file": "v7/v62.java",
+        "line": 271
+      }
+    ],
+    "/api/do_forward_msg": [
+      {
+        "file": "v7/hf3.java",
+        "line": 392
+      }
+    ],
+    "/api/download_apk": [
+      {
+        "file": "v7/s34.java",
+        "line": 1940
+      }
+    ],
+    "/api/download_apk_status": [
+      {
+        "file": "v7/s34.java",
+        "line": 2007
+      }
+    ],
+    "/api/getBaseBandPreferToData": [
+      {
+        "file": "v7/oi0.java",
+        "line": 120
+      }
+    ],
+    "/api/getEndcState": [
+      {
+        "file": "v7/oi0.java",
+        "line": 76
+      }
+    ],
+    "/api/getNetworkMode": [
+      {
+        "file": "v7/rj0.java",
+        "line": 363
+      },
+      {
+        "file": "v7/qi0.java",
+        "line": 56
+      }
+    ],
+    "/api/getOnlyRndisSwitch": [
+      {
+        "file": "v7/s34.java",
+        "line": 3308
+      }
+    ],
+    "/api/getSubIds": [
+      {
+        "file": "v7/zb2.java",
+        "line": 787
+      }
+    ],
+    "/api/getSupportNrBandList": [
+      {
+        "file": "v7/zb2.java",
+        "line": 843
+      }
+    ],
+    "/api/getVoLteState": [
+      {
+        "file": "v7/oi0.java",
+        "line": 162
+      },
+      {
+        "file": "v7/pi0.java",
+        "line": 176
+      }
+    ],
+    "/api/getVoNrState": [
+      {
+        "file": "v7/oi0.java",
+        "line": 204
+      },
+      {
+        "file": "v7/pi0.java",
+        "line": 268
+      }
+    ],
+    "/api/get_cookie": [
+      {
+        "file": "v7/j71.java",
+        "line": 292
+      }
+    ],
+    "/api/get_current_location": [
+      {
+        "file": "v7/v62.java",
+        "line": 636
+      }
+    ],
+    "/api/get_custom_head": [
+      {
+        "file": "v7/v62.java",
+        "line": 154
+      }
+    ],
+    "/api/get_data_limit": [
+      {
+        "file": "v7/rj0.java",
+        "line": 937
+      }
+    ],
+    "/api/get_sms": [
+      {
+        "file": "v7/hf3.java",
+        "line": 608
+      }
+    ],
+    "/api/get_task": [
+      {
+        "file": "v7/ot3.java",
+        "line": 223
+      }
+    ],
+    "/api/get_theme": [
+      {
+        "file": "v7/v62.java",
+        "line": 407
+      }
+    ],
+    "/api/goform/goform_get_cmd_process": [
+      {
+        "file": "v7/k71.java",
+        "line": 18
+      },
+      {
+        "file": "v7/m73.java",
+        "line": 3515
+      },
+      {
+        "file": "v7/ur.java",
+        "line": 149
+      }
+    ],
+    "/api/goform/goform_set_cmd_process": [
+      {
+        "file": "v7/k71.java",
+        "line": 19
+      },
+      {
+        "file": "v7/j71.java",
+        "line": 380
+      }
+    ],
+    "/api/hasTTYD": [
+      {
+        "file": "v7/s34.java",
+        "line": 2215
+      }
+    ],
+    "/api/hotspot": [
+      {
+        "file": "v7/s34.java",
+        "line": 2279
+      },
+      {
+        "file": "v7/rj0.java",
+        "line": 1198
+      }
+    ],
+    "/api/hotspot/boot-autostart": [
+      {
+        "file": "v7/s34.java",
+        "line": 2454
+      }
+    ],
+    "/api/hotspot/boot-autostart-delay": [
+      {
+        "file": "v7/s34.java",
+        "line": 2563
+      }
+    ],
+    "/api/hotspot/config": [
+      {
+        "file": "v7/s34.java",
+        "line": 2741
+      }
+    ],
+    "/api/hotspot/state": [
+      {
+        "file": "v7/s34.java",
+        "line": 3700
+      }
+    ],
+    "/api/install_apk": [
+      {
+        "file": "v7/s34.java",
+        "line": 3130
+      }
+    ],
+    "/api/is_weak_token": [
+      {
+        "file": "v7/v62.java",
+        "line": 470
+      }
+    ],
+    "/api/list_tasks": [
+      {
+        "file": "v7/ot3.java",
+        "line": 289
+      }
+    ],
+    "/api/lockBand": [
+      {
+        "file": "v7/zb2.java",
+        "line": 996
+      }
+    ],
+    "/api/lockBandInfo": [
+      {
+        "file": "v7/zb2.java",
+        "line": 105
+      },
+      {
+        "file": "v7/rj0.java",
+        "line": 3994
+      }
+    ],
+    "/api/lockCell": [
+      {
+        "file": "v7/zb2.java",
+        "line": 1265
+      }
+    ],
+    "/api/lockCellInfo": [
+      {
+        "file": "v7/zb2.java",
+        "line": 468
+      },
+      {
+        "file": "v7/rj0.java",
+        "line": 4052
+      }
+    ],
+    "/api/need_token": [
+      {
+        "file": "v7/m73.java",
+        "line": 3092
+      }
+    ],
+    "/api/one_click_shell": [
+      {
+        "file": "v7/s34.java",
+        "line": 3200
+      }
+    ],
+    "/api/plugins_store": [
+      {
+        "file": "v7/v62.java",
+        "line": 701
+      }
+    ],
+    "/api/power_status_forward_enabled": [
+      {
+        "file": "v7/hf3.java",
+        "line": 1153
+      }
+    ],
+    "/api/proxy": [
+      {
+        "file": "v7/r74.java",
+        "line": 46
+      }
+    ],
+    "/api/proxy/": [
+      {
+        "file": "v7/r74.java",
+        "line": 46
+      }
+    ],
+    "/api/proxy/--": [
+      {
+        "file": "v7/ht.java",
+        "line": 148
+      },
+      {
+        "file": "v7/mn.java",
+        "line": 404
+      }
+    ],
+    "/api/remove_task": [
+      {
+        "file": "v7/ot3.java",
+        "line": 356
+      }
+    ],
+    "/api/root_shell": [
+      {
+        "file": "v7/s34.java",
+        "line": 3315
+      }
+    ],
+    "/api/send_sms": [
+      {
+        "file": "v7/hf3.java",
+        "line": 1565
+      }
+    ],
+    "/api/setBaseBandPreferToData": [
+      {
+        "file": "v7/wh0.java",
+        "line": 9
+      }
+    ],
+    "/api/setEndcState": [
+      {
+        "file": "v7/wh0.java",
+        "line": 8
+      }
+    ],
+    "/api/setNetworkMode": [
+      {
+        "file": "v7/rj0.java",
+        "line": 3679
+      }
+    ],
+    "/api/setOnlyRndisSwitch": [
+      {
+        "file": "v7/s34.java",
+        "line": 155
+      }
+    ],
+    "/api/setVoLteState": [
+      {
+        "file": "v7/wh0.java",
+        "line": 6
+      }
+    ],
+    "/api/setVoNrState": [
+      {
+        "file": "v7/wh0.java",
+        "line": 7
+      }
+    ],
+    "/api/set_cookie": [
+      {
+        "file": "v7/j71.java",
+        "line": 435
+      }
+    ],
+    "/api/set_custom_head": [
+      {
+        "file": "v7/v62.java",
+        "line": 817
+      }
+    ],
+    "/api/set_data_limit": [
+      {
+        "file": "v7/v62.java",
+        "line": 884
+      }
+    ],
+    "/api/set_nickname": [
+      {
+        "file": "v7/v62.java",
+        "line": 1050
+      }
+    ],
+    "/api/set_theme": [
+      {
+        "file": "v7/v62.java",
+        "line": 1113
+      }
+    ],
+    "/api/set_token": [
+      {
+        "file": "v7/v62.java",
+        "line": 1166
+      }
+    ],
+    "/api/sim_slot": [
+      {
+        "file": "v7/qi0.java",
+        "line": 97
+      }
+    ],
+    "/api/sms_forward_blacklist": [
+      {
+        "file": "v7/hf3.java",
+        "line": 102
+      }
+    ],
+    "/api/sms_forward_curl": [
+      {
+        "file": "v7/hf3.java",
+        "line": 175
+      }
+    ],
+    "/api/sms_forward_dingtalk": [
+      {
+        "file": "v7/hf3.java",
+        "line": 323
+      }
+    ],
+    "/api/sms_forward_enabled": [
+      {
+        "file": "v7/hf3.java",
+        "line": 463
+      }
+    ],
+    "/api/sms_forward_mail": [
+      {
+        "file": "v7/hf3.java",
+        "line": 1088
+      }
+    ],
+    "/api/sms_forward_method": [
+      {
+        "file": "v7/hf3.java",
+        "line": 539
+      }
+    ],
+    "/api/sms_receive_mode": [
+      {
+        "file": "v7/hf3.java",
+        "line": 1218
+      }
+    ],
+    "/api/speedtest": [
+      {
+        "file": "v7/s34.java",
+        "line": 3241
+      }
+    ],
+    "/api/unlockAllBand": [
+      {
+        "file": "v7/zb2.java",
+        "line": 1781
+      }
+    ],
+    "/api/unlockAllCell": [
+      {
+        "file": "v7/zb2.java",
+        "line": 2131
+      }
+    ],
+    "/api/upload_img": [
+      {
+        "file": "v7/v62.java",
+        "line": 1231
+      }
+    ],
+    "/api/usb_status": [
+      {
+        "file": "v7/v62.java",
+        "line": 1460
+      }
+    ],
+    "/api/user_shell": [
+      {
+        "file": "v7/s34.java",
+        "line": 173
+      }
+    ],
+    "/api/version_info": [
+      {
+        "file": "v7/m73.java",
+        "line": 3444
+      },
+      {
+        "file": "v7/mh0.java",
+        "line": 521
+      },
+      {
+        "file": "v7/rj0.java",
+        "line": 605
+      },
+      {
+        "file": "v7/qw1.java",
+        "line": 48
+      },
+      {
+        "file": "v7/ti0.java",
+        "line": 412
+      }
+    ],
+    "/api/volte_status": [
+      {
+        "file": "v7/rj0.java",
+        "line": 2165
+      },
+      {
+        "file": "v7/gi0.java",
+        "line": 71
+      },
+      {
+        "file": "v7/pi0.java",
+        "line": 159
+      }
+    ],
+    "/api/vonr_status": [
+      {
+        "file": "v7/rj0.java",
+        "line": 2165
+      },
+      {
+        "file": "v7/gi0.java",
+        "line": 120
+      },
+      {
+        "file": "v7/pi0.java",
+        "line": 251
+      }
+    ]
+  },
+  "counts": {
+    "features": 115,
+    "screens": 43,
+    "endpoints": 88,
+    "status": {
+      "existing": 24,
+      "missing": 51,
+      "partial": 29,
+      "research": 4,
+      "equivalent": 7
+    }
+  }
+}
+</script><script>'use strict';
+const catalog = JSON.parse(document.getElementById('catalog-data').textContent);
+const $ = id => document.getElementById(id);
+const node = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+const btn = (label, fn, cls = '') => { const b = node('button', cls, label); b.type = 'button'; b.addEventListener('click', fn); return b; };
+const state = { group: 'overview', section: 'dashboard', backend: 'KANO', overlay: null, jobs: [], drafts: new Map(), message: 0, catalogQuery: '', catalogStatus: 'all' };
+const sectionNames = Object.fromEntries(catalog.groups.flatMap(g => g.sections));
+const groupNames = Object.fromEntries(catalog.groups.map(g => [g.id, g.name]));
+const statusShort = { existing:'已有实现待对齐', partial:'部分实现', missing:'待实现', equivalent:'Linux 等价实现', research:'待核实' };
+const interactionNames = {page:'页面工作区',drawer:'右侧编辑 / 详情抽屉',inline:'页面内编辑与保存',confirm:'单层变更确认',stepper:'分阶段向导',split:'列表与停靠详情',job:'可追踪的长任务',window:'隔离的独立窗口'};
+const icons = {
+ overview:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/>',signal:'<path d="M4 20v-4m5 4v-8m5 8V7m5 13V3"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',terminal:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 8 4 4-4 4m7 0h3"/>',refresh:'<path d="M20 10a8 8 0 0 0-14-5L3 8m0-5v5h5m-4 6a8 8 0 0 0 14 5l3-3m0 5v-5h-5"/>',settings:'<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="18" r="2"/>'
+};
+function toast(message) { if ($('overlay').open) { let feedback=$('overlay-body').querySelector('.overlay-feedback'); if(!feedback){feedback=node('p','state-banner overlay-feedback');feedback.setAttribute('role','status');$('overlay-body').append(feedback);} feedback.textContent=message; return; } $('toast').textContent = message; $('toast').hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { $('toast').hidden = true; }, 3500); }
+function status(f) { return node('span', `status ${f.status}`, statusShort[f.status]); }
+function heading(title, description, actions = []) { const root = node('div','page-heading'), copy=node('div');copy.append(node('h1','',title),node('p','',description)); const controls=node('div','heading-actions');controls.append(...actions);root.append(copy,controls);return root; }
+function panel(title, subtitle, content) { const p=node('section','panel'),head=node('div','panel-head'); head.append(node('h3','',title),node('small','',subtitle||''));p.append(head); if(content)p.append(content); return p; }
+function featureList(features, limit) {const list=node('div','feature-list');for(const f of features.slice(0,limit||features.length)){const b=btn('',()=>featureDetail(f),'feature-row'),title=node('div');title.append(node('strong','',f.name),node('small','',f.id));b.append(title,node('p','',interactionNames[f.interaction]),status(f),node('span','arrow','›'));list.append(b);}return list;}
+function scopedFeatures(){return catalog.features.filter(f=>f.section===state.section);}
+function route(group,section){state.group=group;state.section=section||catalog.groups.find(g=>g.id===group)?.sections[0][0];render();}
+function render(){
+ const group=catalog.groups.find(g=>g.id===state.group);$('crumb').textContent=group?group.name:state.group==='catalog'?'功能对照':'实施计划';
+ document.querySelectorAll('[data-group]').forEach(b=>{b.classList.toggle('active',b.dataset.group===state.group);b.setAttribute('aria-current',b.dataset.group===state.group?'page':'false');});
+ $('catalog-button').classList.toggle('active',state.group==='catalog');$('roadmap-button').classList.toggle('active',state.group==='roadmap');
+ $('section-nav').replaceChildren(); if(group)for(const [key,title]of group.sections){const b=btn(title,()=>route(group.id,key),key===state.section?'active':'');b.setAttribute('aria-current',key===state.section?'page':'false');$('section-nav').append(b);}
+ const work=$('workspace'); work.replaceChildren(); work.scrollTop=0;
+ if(state.group==='catalog')renderCatalog(work);else if(state.group==='roadmap')renderRoadmap(work);else if(state.section==='dashboard')renderDashboard(work);else if(state.section==='hotspot')renderWifi(work);else if(state.section==='sms')renderSms(work);else if(state.section==='capture')renderCapture(work);else if(state.section==='updates')renderUpdates(work);else if(state.section==='devices')renderDevices(work);else renderSection(work);
+ $('footer-text').textContent=`模拟模式：${state.backend} · 当前真机仅 F50 / UFI-TOOLS`;
+}
+function renderDashboard(root){
+ root.append(heading('设备总览','信息集中在首页；所有快捷操作进入同一套设置流程。',[btn('查看交互规则',()=>rules()),btn('模拟连接中断',()=>offlineDemo())]));
+ const metrics=node('div','panel metrics');for(const [name,value,unit,desc]of[['CPU 温度','54.2','°C','示例读数'],['内存使用率','62.4','%','示例读数'],['今日用量','4.31','GB','蜂窝网络 · 示例'],['在线终端','3','台','Wi-Fi 与有线 · 示例']]){const m=node('div','metric'),num=node('strong','',value);num.append(node('small','',unit));m.append(node('small','',name),num,node('p','',desc));metrics.append(m);}root.append(metrics);
+ const cols=node('div','two-col'),body=node('div','panel-body'),speeds=node('div','speed-values');for(const [label,v]of[['下载','1.24 MB/s'],['上传','186 KB/s']]){const d=node('div');d.append(node('small','',label),node('strong','',v));speeds.append(d);}body.append(speeds);
+ const chart=node('div','chart');chart.innerHTML='<svg viewBox="0 0 600 160" preserveAspectRatio="none" aria-label="示例速率曲线"><path d="M0 15H600M0 58H600M0 101H600M0 144H600" fill="none" stroke="#e9eee9"/><path d="M0 125L20 121 40 118 60 130 80 120 100 117 120 75 140 80 160 64 180 95 200 79 220 83 240 53 260 58 280 32 300 59 320 58 340 80 360 47 380 67 400 82 420 71 440 49 460 67 480 51 500 63 520 27 540 48 560 36 580 54 600 42" fill="none" stroke="#447a5b" stroke-width="2"/><path d="M0 143L40 139 80 142 120 130 160 139 200 132 240 123 280 130 320 137 360 129 400 132 440 119 480 125 520 131 560 120 600 122" fill="none" stroke="#6b8ca4" stroke-width="1.7"/></svg>';body.append(chart);const cf=node('div','chart-foot');cf.append(node('span','','近 5 分钟 · 示例'),node('span','','不是实时设备数据'));body.append(cf);cols.append(panel('实时速率','趋势区不承担设置功能',body));
+ const list=node('div','stat-list');for(const [label,value,link]of[['网络','5G · 示例','cellular'],['当前卡槽','SIM 1 · 示例','cellular'],['热点','UFI-F50 · 示例','hotspot'],['未读短信','2 条 · 示例','sms'],['计划任务','每日重启 · 示例','tasks']]){const row=node('div','stat-row');row.append(node('span','',label),btn(value,()=>goSection(link),'link-button'));list.append(row);}cols.append(panel('当前连接','设备目标始终可见',list));root.append(cols);
+ const foot=node('div','panel panel-spaced');foot.append(featureList(catalog.features.filter(f=>f.section==='dashboard')));root.append(foot);
+}
+function goSection(section){const group=catalog.groups.find(g=>g.sections.some(([key])=>key===section));route(group.id,section);}
+function renderWifi(root){
+ root.append(heading('Wi-Fi 热点','查看与编辑分开；保存只提交本组变更，热点重启后确认结果。',[btn('查看功能清单',()=>openFeatureSet(scopedFeatures()))]));
+ root.append(node('div','state-banner','流程样例：点“编辑”修改名称 → 查看变更 → 确认（模拟）→ 查看任务结果。整个过程始终只使用一个编辑层。'));
+ const p=node('div','panel');
+ for(const [title,desc,value,edit]of[['无线网络','当前示例热点已开启。','已开启',()=>editWifi()],['网络名称与认证','芯片 1 / 主热点 · 示例','UFI-F50',()=>editWifi()],['频段与信道','选项来自设备能力；不固定假设支持双频。','5 GHz · 自动',()=>featureDetailById('wifi.radio')],['访客与终端隔离','不同热点分别保存，避免覆盖另一个热点。','关闭',()=>featureDetailById('wifi.isolation')],['开机自启与延迟','当前状态与下次开机动作分别显示。','需能力探测',()=>featureDetailById('wifi.boot')]]){const row=node('div','setting-row'),copy=node('div'),right=node('div','setting-value');copy.append(node('h3','',title),node('p','',desc));right.append(node('span','',value),btn('编辑',edit));row.append(copy,right);p.append(row);}root.append(p);
+ root.append(node('p','note','计划中的字段包括认证方式、保持/替换/清除口令、SSID、终端上限、隐藏、隔离、芯片/频段、信道、带宽、访客和开机延迟。能力不支持时说明原因，不生成虚假默认值。'));
+}
+const demoMessages=[{from:'10000',title:'流量提醒（示例）',date:'10:42',text:'这是一条用于展示阅读、回复和删除流程的示例短信，不来自你的设备。'}, {from:'系统示例',title:'设备通知（示例）',date:'昨天',text:'列表选中项保持稳定。后台刷新不会让你正在阅读的短信跳到另一条。'}];
+function renderSms(root){root.append(heading('短信','列表与阅读详情并排；写短信使用独立草稿抽屉。',[btn('写短信',()=>composeSms(),'primary')]));const split=node('div','panel split-view'),list=node('div','message-list');demoMessages.forEach((m,i)=>{const b=btn('',()=>{state.message=i;render();},'message-item'+(i===state.message?' active':''));b.append(node('strong','',m.from),node('p','',m.title),node('time','',m.date));list.append(b);});const m=demoMessages[state.message],detail=node('div','message-detail'),acts=node('div','message-actions');detail.append(node('h2','',m.from),node('small','note','SIM 1 · 演示数据'),node('p','',m.text));acts.append(btn('回复',()=>composeSms(m.from)),btn('删除',()=>deleteExample('这条示例短信','删除不可恢复；实际软件会显示号码、时间和内容摘要。')));detail.append(acts);split.append(list,detail);root.append(split);const p=node('div','panel panel-spaced');p.append(featureList(scopedFeatures()));root.append(p);}
+function renderCapture(root){
+ root.append(heading('信令分析','消息流、字段树与原始帧分区展示；详情可停靠，不连续叠弹窗。',[btn('RRC 树示例',()=>rrcDemo()),btn('开始采集（模拟）',()=>startJob('信令采集','正在采集 · 仅演示','running'),'primary')]));
+ root.append(node('div','state-banner',state.backend==='ZWRT'?'ZWRT 交互样例。没有实际 datad 连接；以下是合成示例帧。':'当前模拟模式不适用于此能力。完整实现将显示固件/后端要求；下方仅演示 ZWRT 的界面布局。'));
+ const body=node('div','table-scroll'),table=node('table');table.innerHTML='<thead><tr><th>设备时间</th><th>方向</th><th>协议 / 名称</th><th>摘要</th><th>来源</th></tr></thead>';
+ const tb=node('tbody');for(const row of [['10:42:01.120','DL','NR RRC','MeasurementReport · 示例','合成帧'],['10:42:01.214','UL','LTE NAS','会话更新 · 示例','合成帧'],['10:42:02.005','DL','NR ML1','服务小区测量 · 示例','合成帧']]){const tr=node('tr','capture-row');tr.tabIndex=0;tr.setAttribute('role','button');tr.setAttribute('aria-label','打开示例帧详情');row.forEach(v=>tr.append(node('td','',v)));tr.addEventListener('click',rrcDemo);tr.addEventListener('keydown',e=>{if(e.key==='Enter')rrcDemo();});tb.append(tr);}table.append(tb);body.append(table);root.append(panel('消息流','示例 · 可点击行查看树',body));
+ const p=node('div','panel panel-spaced');p.append(featureList(scopedFeatures()));root.append(p);
+}
+function renderUpdates(root){root.append(heading('软件更新','设备服务与本机客户端更新分开；安装阶段可跨页面追踪。'));const p=node('div','panel');for(const [title,desc,action]of[['UFI-TOOLS','检查 → 下载 → 校验 → 安装 → 等待设备 → 回读版本',()=>updateDemo('UFI-TOOLS')],['datad','仅 ZWRT；包含更新源与空闲时自动更新',()=>updateDemo('datad')],['Linux 客户端','本机版本、更新说明和安装包',()=>featureDetailById('updates.desktop')]]){const row=node('div','setting-row'),copy=node('div');copy.append(node('h3','',title),node('p','',desc));row.append(copy,btn('查看流程',action));p.append(row);}root.append(p);const f=node('div','panel panel-spaced');f.append(featureList(scopedFeatures()));root.append(f);}
+function renderDevices(root){root.append(heading('设备与连接','四种模式共用工作区，通过能力探测决定可执行操作。',[btn('添加设备（流程样例）',connectionDemo,'primary')]));const p=node('div','panel');for(const [name,desc]of[['KANO','已有 UFI-TOOLS：签名 API + 官方后台代理'],['GOFORM','直接连接原厂后台：会话、AD 与官方能力'],['ZWRT','datad：Bearer、JSON、WebSocket 与信令流'],['STANDALONE','远程 Android：ABI、Root、合法授权与桥接服务']]){const row=node('div','setting-row'),copy=node('div');copy.append(node('h3','',name),node('p','',desc));row.append(copy,node('span','mini-tag',name==='KANO'?'当前有 F50 真机':'待对应环境验收'));p.append(row);}root.append(p);const f=node('div','panel panel-spaced');f.append(featureList(scopedFeatures()));root.append(f);}
+function renderSection(root){const fs=scopedFeatures();root.append(heading(sectionNames[state.section],`${groupNames[state.group]} / ${sectionNames[state.section]} · ${fs.length} 个功能项。点击条目查看入口、层级、证据和验收条件。`));if(['speed','terminal','proxy','autostart'].includes(state.section)){const flow=node('div','flow-line');['选择目标与参数','执行前检查','提交一次','进度与结果','回读 / 导出'].forEach((t,i)=>{if(i)flow.append(node('b','','→'));flow.append(node('span','',t));});root.append(flow);}const p=node('div','panel');p.append(featureList(fs));root.append(p);root.append(node('p','note','这是完整功能的布局映射，待实现项没有被伪装成可执行设备操作。实际开发会使用本页对应的领域视图，不把功能清单直接作为最终产品界面。'));}
+function renderCatalog(root){root.append(heading('完整功能对照','以 APK 页面、菜单与协议证据作为迁移基线；未知分支继续补充，不按当前设备删减范围。',[btn('实施依赖',()=>route('roadmap',''))]));const counts=node('div','panel summary-counts');for(const [n,label]of[[catalog.counts.features,'功能项'],[catalog.counts.screens,'页面 / 对话框声明'],[catalog.counts.endpoints,'/api 路径字面量']]){const d=node('div');d.append(node('strong','',n),document.createTextNode(label));counts.append(d);}root.append(counts);const bar=node('div','workspace-toolbar');bar.style.marginTop='18px';const input=node('input');input.type='search';input.placeholder='搜索名称、ID、后端或功能说明';input.setAttribute('aria-label','筛选功能清单');input.value=state.catalogQuery;const select=node('select');select.setAttribute('aria-label','筛选现状');for(const [v,label]of[['all','全部现状'],...Object.entries(statusShort)]){const opt=node('option','',label);opt.value=v;select.append(opt);}select.value=state.catalogStatus;const count=node('small');bar.append(input,select,count);root.append(bar);const p=node('div','panel');root.append(p);function filter(){state.catalogQuery=input.value;state.catalogStatus=select.value;const q=input.value.trim().toLowerCase();const list=catalog.features.filter(f=>(select.value==='all'||f.status===select.value)&&`${f.name} ${f.id} ${f.modes} ${f.acceptance}`.toLowerCase().includes(q));p.replaceChildren(list.length?featureList(list):node('div','empty','没有符合条件的功能'));count.textContent=`${list.length} / ${catalog.features.length} 项`;}input.addEventListener('input',filter);select.addEventListener('change',filter);filter();root.append(node('p','note',catalog.completeness));}
+function renderRoadmap(root){root.append(heading('实施计划','所有阶段都是交付范围；对应环境缺失只影响验收状态，不把功能移出计划。'));const list=node('div','roadmap-list');for(const phase of catalog.phases){const p=node('article','phase'),content=node('div');p.append(node('div','phase-id',phase.id));content.append(node('h3','',phase.name),node('p','',`依赖：${phase.depends.join('、')||'无'}`));const ul=node('ul');phase.deliverables.forEach(v=>ul.append(node('li','',v)));content.append(ul,node('p','',`完成条件：${phase.doneWhen}`));p.append(content);list.append(p);}root.append(list);}
+function openOverlay(title,kicker,cls,renderer,{dirty=false}={}){const previous=state.overlay?.previous||document.activeElement;state.overlay={title,kicker,cls,renderer,dirty,previous};drawOverlay();if(!$('overlay').open)$('overlay').showModal();}
+function drawOverlay(){const o=state.overlay;$('overlay').className=o.cls||'';$('overlay-title').textContent=o.title;$('overlay-kicker').textContent=o.kicker||'';$('overlay-body').replaceChildren();$('overlay-actions').replaceChildren();o.renderer($('overlay-body'),$('overlay-actions'));}
+function closeOverlay(force=false){if(!state.overlay)return;if(state.overlay.dirty&&!force){const saved=state.overlay;state.overlay={...saved,title:'保留未保存的更改？',kicker:'关闭编辑 · 单层确认',dirty:false,renderer(body,actions){body.append(node('p','detail-text','关闭不会提交设备操作。你可以继续编辑，或将草稿留在当前设备的内存会话中。'));actions.append(btn('继续编辑',()=>{state.overlay=saved;drawOverlay();}),btn('保留草稿并关闭',()=>{saved.saveDraft?.();closeOverlay(true);}),btn('放弃更改',()=>{saved.discard?.();closeOverlay(true);},'danger'));}};drawOverlay();return;}const previous=state.overlay.previous;state.overlay=null;$('overlay').close();if(previous?.isConnected)previous.focus();}
+function featureDetailById(id){featureDetail(catalog.features.find(f=>f.id===id));}
+function featureDetail(f){if(!f)return;openOverlay(f.name,`${groupNames[f.group]} / ${sectionNames[f.section]} · ${f.id}`,'drawer',(body,actions)=>{body.append(status(f));for(const [label,content]of[['交互层级',interactionNames[f.interaction]],['能力与后端',f.modes.map(m=>({all:'四种模式（逐项核实）',capability:'按设备能力',verify:'待核实',local:'Linux 本机'}[m]||m)).join(' / ')],['实施阶段',`${f.phase} · ${catalog.phases.find(p=>p.id===f.phase).name}`],['验收条件',f.acceptance]]){body.append(node('div','detail-label',label),node('p','detail-text',content));}body.append(node('div','detail-label','APK 证据'));for(const e of f.evidence)body.append(node('div','detail-code',`${e.file}:${e.line}\n${e.pattern}\n${e.basis}`));body.append(node('p','note','当前现状不是完成承诺。后续需分别记录界面、协议测试、真机读取、写入及回读。'));actions.append(btn('前往所属页面',()=>{closeOverlay(true);route(f.group,f.section);}),btn('关闭',()=>closeOverlay()));});}
+function openFeatureSet(fs){openOverlay('本页功能范围','范围核对','wide',body=>body.append(featureList(fs)));}
+function formField(key,label,value,type='text',choices){const wrap=node('label','form-field');wrap.append(node('span','',label));const input=node(choices?'select':type==='textarea'?'textarea':'input');input.name=key;input.setAttribute('aria-label',label);if(choices){for(const [v,title]of choices){const o=node('option','',title);o.value=v;input.append(o);}}else if(type==='textarea'){input.rows=6;}else input.type=type;input.value=value;wrap.append(input);return {wrap,input};}
+function editWifi(){const key='f50:wifi-basic',defaults={ssid:'UFI-F50',auth:'WPA2-PSK',hidden:'否'},draft={...defaults,...state.drafts.get(key)};const renderEditor=(body,actions)=>{body.append(node('p','step-caption','1 / 3 · 编辑。演示目标：F50 / 主热点，不会提交到设备。'));const fields=[formField('ssid','网络名称（SSID）',draft.ssid),formField('auth','认证方式',draft.auth,'text',[['WPA2-PSK','WPA2-PSK'],['WPA3-SAE','WPA3-SAE（能力示例）']]),formField('hidden','隐藏网络',draft.hidden,'text',[['否','否'],['是','是']])];fields.forEach(({wrap,input})=>{body.append(wrap);input.addEventListener('input',()=>{draft[input.name]=input.value;state.overlay.dirty=JSON.stringify(defaults)!==JSON.stringify(draft);save.disabled=!state.overlay.dirty;});});body.append(node('p','note','口令实际设计使用“保持 / 替换 / 清除”三态。此样例不读取或保存真实口令。'));const save=btn('查看变更',()=>{if(!draft.ssid.trim()){toast('请填写网络名称');return;}review();},'primary');save.disabled=JSON.stringify(defaults)===JSON.stringify(draft);actions.append(btn('取消',()=>closeOverlay()),save);};
+ const review=()=>{state.overlay={...state.overlay,title:'确认 Wi-Fi 变更',kicker:'2 / 3 · 同一抽屉内确认',renderer(body,actions){body.append(node('p','detail-text','目标：F50 / KANO / 主热点（演示）'));for(const [key,label]of[['ssid','SSID'],['auth','认证'],['hidden','隐藏']])if(defaults[key]!==draft[key]){const r=node('div','review-diff');r.append(node('span','',label),node('strong','',defaults[key]),node('span','','→'),node('strong','',draft[key]));body.append(r);}body.append(node('p','review-note','真实操作可能使无线终端断开。软件应按“提交 → 等待恢复 → 回读热点配置”确认生效，不因超时重复提交。'));actions.append(btn('返回修改',()=>{state.overlay.title='编辑 Wi-Fi';state.overlay.kicker='F50 · 主热点';state.overlay.renderer=renderEditor;drawOverlay();}),btn('确认（模拟）',()=>{state.drafts.delete(key);state.overlay.dirty=false;state.overlay.title='操作结果';state.overlay.kicker='3 / 3 · 演示完成';state.overlay.renderer=(b,a)=>{b.append(node('div','success-mark','演示流程完成，没有修改设备。'),node('p','note','正式实现会展示设备返回值、回读结果和时间；不把此演示状态当作真实成功。'));a.append(btn('查看任务中心',()=>{closeOverlay(true);jobs();}),btn('关闭',()=>closeOverlay(true),'primary'));};startJob('Wi-Fi 设置变更','模拟提交与回读完成','succeeded',false);drawOverlay();},'primary'));}};drawOverlay();};
+ openOverlay('编辑 Wi-Fi','F50 · 主热点','drawer',renderEditor,{dirty:JSON.stringify(defaults)!==JSON.stringify(draft)});state.overlay.saveDraft=()=>state.drafts.set(key,{...draft});state.overlay.discard=()=>state.drafts.delete(key);
+}
+function composeSms(to=''){const key='f50:sms',draft={number:to==='系统示例'?'':to,content:'',...state.drafts.get(key)};const edit=(body,actions)=>{body.append(node('p','step-caption','短信草稿 · 演示目标 SIM 1'));const number=formField('number','收件号码',draft.number),content=formField('content','短信内容',draft.content,'textarea');for(const f of[number,content]){body.append(f.wrap);f.input.addEventListener('input',()=>{draft[f.input.name]=f.input.value;state.overlay.dirty=true;});}body.append(node('p','note','草稿仅保留于当前演示会话。确认步骤仍在同一层中完成。'));actions.append(btn('取消',()=>closeOverlay()),btn('查看发送摘要',()=>{if(!draft.number.trim()||!draft.content.trim()){toast('请填写号码和内容');return;}state.overlay.title='确认发送短信';state.overlay.kicker='模拟确认，不会发送';state.overlay.renderer=(b,a)=>{b.append(node('p','detail-text',`收件人：${draft.number}`),node('p','detail-code',draft.content),node('p','review-note','真实发送可能产生运营商费用。发送超时需查询结果，不能自动重发。'));a.append(btn('返回编辑',()=>{state.overlay.title='写短信';state.overlay.renderer=edit;drawOverlay();}),btn('完成演示',()=>{state.drafts.delete(key);closeOverlay(true);startJob('发送短信','演示结束 · 未实际发送','succeeded');},'primary'));};drawOverlay();},'primary'));};openOverlay('写短信','消息 / 短信','drawer',edit,{dirty:!!draft.content});state.overlay.saveDraft=()=>state.drafts.set(key,{...draft});state.overlay.discard=()=>state.drafts.delete(key);}
+function deleteExample(title,description){openOverlay('确认删除','只展示确认结构，不操作设备','',(body,actions)=>{body.append(node('p','detail-text',title),node('p','review-note',description));actions.append(btn('取消',()=>closeOverlay()),btn('模拟删除',()=>{closeOverlay(true);toast('演示完成，示例列表保持不变');},'danger'));});}
+function rrcDemo(){openOverlay('RRC 字段树','信令分析 · 合成示例，不是真实解码结果','wide',(body,actions)=>{body.append(node('div','state-banner','正式实现必须同时保留原始帧与解码来源；未解析字段原样展示。'));const tree=node('div','tree');const root=node('details');root.open=true;root.append(node('summary','','NR RRC · 示例帧'));for(const [label,values]of[['cellIdentity',['pci: 100（演示）','nrArfcn: 633984（演示）']],['measurement',['rsrp: -91 dBm（演示）','source: synthetic fixture']],['rawPayload',['未提供真实载荷','不会据此推断真实基站或安全算法']]]){const d=node('details');d.open=true;d.append(node('summary','',label));values.forEach(v=>d.append(node('div','',v)));root.append(d);}tree.append(root);body.append(tree);actions.append(btn('NDJSON 视图',()=>{state.overlay.title='NDJSON 完整记录';state.overlay.renderer=(b,a)=>{b.append(node('pre','detail-code',JSON.stringify({kind:'synthetic-ui-example',notDeviceData:true,record:{pci:100,nrArfcn:633984}},null,2)));a.append(btn('返回字段树',rrcDemo),btn('关闭',()=>closeOverlay()));};drawOverlay();}),btn('关闭',()=>closeOverlay()));});}
+function updateDemo(name){openOverlay(`${name} 更新流程`,'向导样例 · 不会检查、下载或安装','drawer',(body,actions)=>{body.append(node('p','step-caption','版本信息 → 下载 → 校验 → 安装 → 服务恢复 → 回读版本'));for(const [title,desc]of[['检查版本与来源','来源、签名/校验信息与变更日志可查看。'],['下载与校验','已知总量才显示百分比，此阶段可取消。'],['安装与恢复','提交安装后进入不可取消阶段，关闭页面不会再提交一次。']]){const d=node('div','flow-card');d.style.marginBottom='12px';d.append(node('h3','',title),node('p','',desc));body.append(d);}actions.append(btn('关闭',()=>closeOverlay()),btn('加入演示任务',()=>{closeOverlay(true);startJob(`${name} 更新`,'等待设备恢复 · 阶段示例','waiting-device');},'primary'));});}
+function startJob(title,phase,status='running',open=true){state.jobs.unshift({id:Date.now()+Math.random(),title,phase,status,device:`F50 / ${state.backend}（演示）`});$('job-count').textContent=state.jobs.filter(j=>!['succeeded','cancelled'].includes(j.status)).length;if(open)jobs();}
+function jobs(){openOverlay('任务中心','所有条目均为交互演示，不对应设备操作','drawer',(body,actions)=>{if(!state.jobs.length)body.append(node('div','empty','暂无演示任务。可从 Wi-Fi 保存、信令采集或更新流程添加。'));for(const job of state.jobs){const item=node('div','task-item');item.append(node('strong','',job.title),node('p','',job.device),node('p','',job.phase));if(job.status==='running')item.append(btn('停止演示任务',()=>{job.status='cancelled';job.phase='已停止 · 示例';$('job-count').textContent=state.jobs.filter(j=>!['succeeded','cancelled'].includes(j.status)).length;drawOverlay();}));if(job.status==='waiting-device')item.append(node('p','note','安装阶段不可取消的样例。真实软件会等待服务恢复，而不是自动重发安装请求。'));body.append(item);}actions.append(btn('关闭',()=>closeOverlay()));});}
+function connectionDemo(){openOverlay('添加设备','连接流程 · 不探测真实网络','drawer',(body,actions)=>{body.append(node('p','step-caption','模式 → 地址与认证 → 探测能力 → 确认连接'));const choices=node('div','radio-options');for(const value of['KANO','GOFORM','ZWRT','STANDALONE']){const label=node('label'),input=node('input');input.type='radio';input.name='demo-mode';input.value=value;input.checked=value===state.backend;label.append(input,document.createTextNode(value));choices.append(label);}body.append(choices,node('p','note','KANO 使用 UFI 口令；GOFORM 使用原厂会话；ZWRT 使用 datad Bearer；独立模式还需远程 Android、Root 与合法授权。'));const address=formField('address','设备地址（仅示例）','http://192.168.0.1:2333');body.append(address.wrap);actions.append(btn('取消',()=>closeOverlay()),btn('查看能力确认样例',()=>{const mode=body.querySelector('input:checked').value;state.overlay.title='确认设备能力';state.overlay.kicker='样例 · 未执行网络探测';state.overlay.renderer=(b,a)=>{b.append(node('p','detail-text',`选择模式：${mode}`),node('p','review-note',mode==='KANO'?'当前只有 F50 / UFI-TOOLS 可供真机验收。':'当前没有此模式的验证设备，代码与协议测试不能代替真机验收。'),node('p','note','实际软件会显示版本、可用能力、缺失授权和不支持原因。新连接验证失败时保持旧设备会话。'));a.append(btn('返回',connectionDemo),btn('完成预览',()=>closeOverlay(true),'primary'));};drawOverlay();},'primary'));});}
+function search(){openOverlay('搜索功能','查找所有功能项及其规划入口','search',(body)=>{const input=node('input');input.type='search';input.placeholder='输入功能名、后端或 ID，例如 RRC、短信、OTA';input.setAttribute('aria-label','搜索全部功能');const list=node('div','search-results');body.append(input,list);function update(){const q=input.value.trim().toLowerCase(),matches=catalog.features.filter(f=>`${f.name} ${f.id} ${f.modes}`.toLowerCase().includes(q)).slice(0,12);list.replaceChildren();for(const f of matches){const b=btn('',()=>{closeOverlay(true);route(f.group,f.section);featureDetail(f);},'search-result'),text=node('div');text.append(node('span','',f.name),node('small','',`${groupNames[f.group]} / ${sectionNames[f.section]} · ${f.id}`));b.append(text,status(f));list.append(b);}if(!matches.length)list.append(node('div','empty','没有找到匹配功能'));}input.addEventListener('input',update);update();setTimeout(()=>input.focus(),0);});}
+function rules(){openOverlay('页面与叠放规则','整个软件共用一套交互约束','wide',(body,actions)=>{for(const [title,text]of[['页面内编辑','常规设置留在工作区，后台状态刷新不能覆盖未保存字段。'],['详情停靠','短信、终端、APN、信令的列表与详情并排，不为每次选行打开一个模态。'],['一个编辑层','同一时间只允许一个模态编辑会话。确认阶段复用该层，返回后保留输入。'],['长任务中心','测速、采集、上传、安装、部署的进度持续可见；取消能力由当前阶段决定。'],['焦点与关闭','Esc 与关闭按钮遵守相同的草稿规则，结束后恢复触发按钮焦点。']]){body.append(node('div','detail-label',title),node('p','detail-text',text));}actions.append(btn('体验 Wi-Fi 编辑流程',()=>{closeOverlay(true);route('network','hotspot');editWifi();},'primary'),btn('关闭',()=>closeOverlay()));});}
+function offlineDemo(){openOverlay('连接中断时的交互','概览 / 连接状态','',(body,actions)=>{body.append(node('p','review-note','当前画面保留上次快照并显示采样时间。不能把它继续标作实时在线。'),node('p','detail-text','重连成功后更新监控；未保存表单保持草稿。已提交的短信、安装等操作结果可能未知，先查询状态，不自动重发。'));actions.append(btn('关闭',()=>closeOverlay()),btn('模拟恢复',()=>{closeOverlay(true);toast('恢复流程演示完成，没有连接设备');},'primary'));});}
+for(const group of catalog.groups){const b=btn('',()=>route(group.id),'nav-item');b.dataset.group=group.id;const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.innerHTML=icons[group.icon];b.append(svg,node('span','',group.name));$('main-nav').append(b);}
+$('catalog-size').textContent=catalog.features.length;$('catalog-button').addEventListener('click',()=>route('catalog',''));$('roadmap-button').addEventListener('click',()=>route('roadmap',''));$('search-button').addEventListener('click',search);$('jobs-button').addEventListener('click',jobs);$('device-picker').addEventListener('click',connectionDemo);$('backend').addEventListener('change',()=>{state.backend=$('backend').value;render();toast('仅切换界面模拟模式，不连接设备');});$('overlay-close').addEventListener('click',()=>closeOverlay());$('overlay').addEventListener('cancel',e=>{e.preventDefault();closeOverlay();});document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(!$('overlay').open)search();}});render();
+</script>
+</body></html>

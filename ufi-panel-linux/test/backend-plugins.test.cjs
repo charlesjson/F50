@@ -1,0 +1,56 @@
+'use strict';
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+const { createBackend } = require('../src/backend.cjs');
+const { startFixture } = require('../scripts/fixture-server.cjs');
+const plugin = name => `<!-- [KANO_PLUGIN_START] ${name} -->\n<script>plugin()</script>\n<!-- [KANO_PLUGIN_END] ${name} -->`;
+
+test('plugin settings bind to the current session and external revisions invalidate views exactly once', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'ufi-plugins-backend-'));
+  const first = await startFixture(), second = await startFixture(), events = [], calls = [];
+  const backend = createBackend({ directory, storage: { isEncryptionAvailable: () => false }, host: async (action, input) => { calls.push({ action, input }); return { opened: true }; }, emit: (event, payload) => events.push({ event, payload }) });
+  t.after(async () => { backend.close(); first.close(); second.close(); await fs.rm(directory, { recursive: true, force: true }); });
+  await backend.dispatch('telemetry-configure', 0);
+  first.state.pluginText = plugin('first.js'); second.state.pluginText = plugin('second.js');
+  await backend.dispatch('connect', { name: 'first', address: first.address, password: 'fixture-password' });
+  const list = await backend.dispatch('feature-read', { name: 'plugins-installed' });
+  await backend.dispatch('open-plugin-settings', { id: list.items[0].id, revision: list.revision });
+  const firstOpen = calls.at(-1); assert.equal(firstOpen.action, 'open-plugin-settings'); assert.equal(firstOpen.input.address, first.address + '/');
+  assert.equal(firstOpen.input.view.selected, list.items[0].id);
+  assert.equal(firstOpen.input.view.plugins[0].id, list.items[0].id);
+  assert.equal(firstOpen.input.context, events.find(e => e.event === 'device-clear').payload.context);
+  first.state.pluginText += '\n<!-- external edit -->';
+  await backend.dispatch('feature-read', { name: 'plugins-installed' });
+  await backend.dispatch('feature-read', { name: 'plugins-installed' });
+  assert.equal(events.filter(e => e.event === 'plugins-changed').length, 1);
+  await assert.rejects(backend.dispatch('open-plugin-settings', { id: list.items[0].id, revision: list.revision }), /其他页面修改/);
+  assert.equal(calls.filter(c => c.action === 'open-plugin-settings').length, 1);
+  await backend.dispatch('connect', { name: 'second', address: second.address, password: 'fixture-password' });
+  await assert.rejects(backend.dispatch('open-plugin-settings', { id: list.items[0].id, revision: list.revision }), /其他页面修改/);
+  const latest = await backend.dispatch('feature-read', { name: 'plugins-installed' });
+  await backend.dispatch('open-plugin-settings', { id: latest.items[0].id, revision: latest.revision });
+  assert.notEqual(calls.at(-1).input.context, firstOpen.input.context); assert.equal(calls.at(-1).input.address, second.address + '/');
+  await backend.dispatch('disconnect');
+  await assert.rejects(backend.dispatch('open-plugin-settings', { id: latest.items[0].id, revision: latest.revision }), /请先连接/);
+  assert.equal(first.writes.length + second.writes.length, 0);
+});
+
+test('generic menu requests validate current plugin revision and never accept a source program from the local UI',async t=>{
+  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'ufi-menu-backend-')),fixture=await startFixture(),calls=[];
+  fixture.state.pluginText='<!-- [KANO_PLUGIN_START] arbitrary.js -->\n<script>setTimeout(()=>menu(),10)</script>\n<!-- [KANO_PLUGIN_END] arbitrary.js -->';
+  const backend=createBackend({directory,storage:{isEncryptionAvailable:()=>false},host:async(action,input)=>{calls.push({action,input});return {instance:'menus-fixture',items:[]};},emit:()=>{}});
+  t.after(async()=>{backend.close();fixture.close();await fs.rm(directory,{recursive:true,force:true});});
+  await backend.dispatch('telemetry-configure',0);await backend.dispatch('connect',{name:'fixture',address:fixture.address,password:'fixture-password'});
+  const installed=await backend.dispatch('feature-read',{name:'plugins-installed'});
+  await backend.dispatch('plugin-menus',{revision:installed.revision});
+  assert.equal(calls.at(-1).action,'plugin-menus-start');assert.equal(calls.at(-1).input.plugins[0].id,installed.items[0].id);
+  assert.equal(JSON.stringify(calls.at(-1)).includes('setTimeout'),false);
+  await backend.dispatch('plugin-menu-open',{revision:installed.revision,instance:'menus-fixture',token:'menu-fixture',code:'local_shell()'});
+  assert.equal(calls.at(-1).action,'plugin-menu-open');assert.equal(Object.hasOwn(calls.at(-1).input,'code'),false);
+  const before=calls.length;fixture.state.pluginText+='changed';
+  await assert.rejects(backend.dispatch('plugin-menu-open',{revision:installed.revision,instance:'menus-fixture',token:'menu-fixture'}),/其他页面修改/);
+  assert.equal(calls.length,before);assert.equal(fixture.writes.length,0);
+});

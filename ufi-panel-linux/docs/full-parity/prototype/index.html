@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>UFI Panel · 全量交互规划</title><style>/*STYLES*/</style></head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="12" width="18" height="8" rx="2"/><path d="M7 12V4m10 8V4M7 16h.1m4 0h.1m4 0h3"/></svg><strong>UFI Panel</strong><small>Linux</small></div>
+  <button class="device-picker" id="device-picker"><span class="online-dot"></span><span><strong>F50</strong><small>192.168.0.1:2333</small></span><span class="chevron">⌄</span></button>
+  <nav aria-label="主导航" id="main-nav"></nav>
+  <div class="side-bottom"><button id="catalog-button">功能对照 <span id="catalog-size"></span></button><button id="roadmap-button">实施计划</button><div class="prototype-label">交互原型 · 演示数据</div></div>
+</aside>
+<main>
+  <header class="topbar"><div class="breadcrumbs"><span>F50</span><span>/</span><strong id="crumb">概览</strong></div><div class="top-actions"><button id="search-button" class="search-trigger"><span>搜索功能</span><kbd>Ctrl K</kbd></button><label class="mode-picker"><span>模拟模式</span><select id="backend"><option>KANO</option><option>GOFORM</option><option>ZWRT</option><option>STANDALONE</option></select></label><button id="jobs-button" title="打开任务中心">任务 <span id="job-count">0</span></button></div></header>
+  <div class="design-notice">交互规划预览，不会连接设备或提交操作。功能状态以 0.3.0 为基线，完整实现仍按计划推进。</div>
+  <nav class="section-nav" aria-label="二级导航" id="section-nav"></nav>
+  <div class="workspace" id="workspace" tabindex="-1"></div>
+  <footer><span id="footer-text">当前验证设备：F50 / UFI-TOOLS</span><span>单一编辑层 · 保存前预览变更 · 任务可追踪</span></footer>
+</main>
+<dialog id="overlay" aria-labelledby="overlay-title"><header><div><small id="overlay-kicker"></small><h2 id="overlay-title"></h2></div><button class="icon-button" id="overlay-close" aria-label="关闭">×</button></header><div id="overlay-body"></div><div id="overlay-actions"></div></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<script id="catalog-data" type="application/json">/*CATALOG*/</script><script>/*SCRIPT*/</script>
+</body></html>

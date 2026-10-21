@@ -1,0 +1,61 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {startFixture}=require('./fixture-server.cjs');
+const {launch}=require('./tauri-webdriver.cjs');
+
+(async()=>{
+  const fixture=await startFixture();let ui;const checks=[];
+  const target='00:11:22:33:44:55';
+  fixture.state.clientAcl.WhiteMacList='02:AA:BB:CC:DD:01';fixture.state.clientAcl.WhiteNameList='保留白名单';
+  fixture.state.clientAcl.BlackMacList='00:AA:BB:CC:DD:01;00:AA:BB:CC:DD:02';fixture.state.clientAcl.BlackNameList='已有甲;已有乙';
+  const select='[data-client-access="client-block"]';
+  const ready=()=>ui.wait('!document.getElementById("refresh-button").disabled && !document.getElementById("feature-dialog").open && !!document.querySelector("[data-client-access=client-block]") && !document.querySelector("[data-client-access=client-block]").disabled');
+  try {
+    ui=await launch();await ui.wait('document.readyState==="complete"&&typeof window.ufi==="object"');
+    await ui.run('window.__clientErrors=[];addEventListener("error",e=>__clientErrors.push(e.message));addEventListener("unhandledrejection",e=>__clientErrors.push(String(e.reason)))');
+    await ui.select('#poll-interval','0');await ui.click('#welcome-connect');await ui.fill('#address',fixture.address);await ui.fill('#password','fixture-password');await ui.click('#submit-connection');
+    await ui.wait('document.getElementById("temperature").textContent==="52.1"');await ui.navigate('clients');await ready();
+    assert.equal(await ui.run('document.querySelectorAll("#clients-content [data-client-access]").length'),1);
+    assert.equal(await ui.run('document.querySelectorAll("#blocked-clients-content tbody tr").length'),2);
+    checks.push('only Wi-Fi rows have kick buttons; existing blacklist and restore actions are visible');
+    await ui.click(select);await ui.wait('!!document.querySelector("[data-confirm-operation]")');
+    const preview=await ui.run('document.querySelector(".operation-detail").textContent');
+    for(const expected of ['工作电脑','192.168.0.3',target,'持续禁止重连'])assert.ok(preview.includes(expected),expected);
+    assert.equal(fixture.writes.length,0);await ui.click('#feature-dialog .dialog-actions button:first-child');await ready();assert.equal(fixture.writes.length,0);
+    checks.push('preview identifies target and persistent block; cancel performs no device write');
+    await ui.click(select);await ui.wait('!!document.querySelector("[data-confirm-operation]")');
+    fixture.state.clientAcl.BlackNameList='外部页面修改;已有乙';
+    await ui.click('[data-confirm-operation]');await ready();assert.equal(fixture.writes.length,0);
+    assert.ok((await ui.run('document.getElementById("blocked-clients-content").textContent')).includes('外部页面修改'));
+    checks.push('another page changing the ACL while confirmation is open prevents stale writes and reloads the list');
+    await ui.click(select);await ui.wait('!!document.querySelector("[data-confirm-operation]")');await ui.click('[data-confirm-operation]');
+    await ui.wait('document.querySelectorAll("#clients-content tbody tr").length===1 && document.querySelectorAll("#blocked-clients-content tbody tr").length===3 && !document.querySelector("[data-client-access=client-unblock]").disabled');
+    assert.equal(fixture.writes.length,1);const first=fixture.writes[0].body;
+    assert.equal(first.goformId,'setDeviceAccessControlList');assert.equal(first.AclMode,'2');
+    assert.equal(first.WhiteMacList,'02:AA:BB:CC:DD:01');assert.equal(first.WhiteNameList,'保留白名单');
+    assert.equal(first.BlackMacList,'00:AA:BB:CC:DD:01;00:AA:BB:CC:DD:02;'+target);
+    assert.equal(first.BlackNameList,'外部页面修改;已有乙;工作电脑');
+    ui.screenshot('tauri-client-blocked');
+    checks.push('confirm sends one authenticated MAC block; targeted Wi-Fi row leaves while LAN and all prior ACL entries remain');
+    await ui.click('[data-client-access="client-unblock"][data-client-mac="'+target+'"]');await ui.wait('!!document.querySelector("[data-confirm-operation]")');
+    assert.ok((await ui.run('document.getElementById("feature-dialog-title").textContent')).includes('解除'));
+    await ui.click('[data-confirm-operation]');await ready();
+    assert.equal(fixture.writes.length,2);assert.equal(fixture.writes[1].body.BlackMacList,'00:AA:BB:CC:DD:01;00:AA:BB:CC:DD:02');
+    assert.equal(fixture.writes[1].body.BlackNameList,'外部页面修改;已有乙');
+    checks.push('restore removes just the selected MAC/name and the Wi-Fi terminal can reconnect');
+    fixture.state.clientAclMissing=true;await ui.click('#refresh-button');
+    await ui.wait('!document.getElementById("refresh-button").disabled && !document.querySelector("#clients-content [data-client-access]")');
+    assert.equal(await ui.run('document.querySelectorAll("#clients-content tbody tr").length'),2);
+    assert.ok((await ui.run('document.getElementById("clients-access-note").textContent')).includes('未提供'));
+    checks.push('firmware without complete ACL support keeps terminals visible and omits unsupported write controls');
+    assert.deepEqual(await ui.run('window.__clientErrors'),[]);
+    const report={result:'passed',nativeWebKit:true,checks,fixtureWrites:fixture.writes.length,realDeviceWrites:0};
+    fs.writeFileSync(path.join(__dirname,'../artifacts/tauri-client-access-validation.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
+  } catch(error) {
+    console.error(ui?.diagnostics.slice(-2500));
+    console.error(await ui?.run('({errors:window.__clientErrors,note:document.getElementById("clients-access-note")?.textContent,status:document.getElementById("clients-status")?.textContent,toast:document.getElementById("toast")?.textContent,dialog:document.getElementById("feature-dialog")?.textContent})').catch(()=>null));
+    throw error;
+  } finally {await ui?.close();fixture.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

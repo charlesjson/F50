@@ -1,0 +1,8 @@
+node_modules/
+release/
+artifacts/
+.env*
+*.local.json
+
+build/
+src-tauri/target/

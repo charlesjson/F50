@@ -1,0 +1,7 @@
+/* WebKitGTK 2.54 can accumulate rendering memory for UFI's animated backdrop
+   filters. Apply at user stylesheet priority before loading device content.
+   Keep ordinary `filter` intact: the device uses it to blur private fields. */
+*, *::before, *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}

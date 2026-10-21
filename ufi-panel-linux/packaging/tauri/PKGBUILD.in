@@ -1,0 +1,13 @@
+pkgname=ufi-panel-linux
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc='UFI-TOOLS device manager using Tauri and system WebKitGTK'
+arch=('x86_64')
+license=('MIT')
+depends=('nodejs>=18' 'webkit2gtk-4.1' 'gtk3')
+optdepends=('gnome-keyring: encrypted connection storage through Secret Service'
+            'kwallet: encrypted connection storage on KDE')
+options=('!strip' '!debug')
+source=("ufi-panel-linux-${pkgver}-tauri-files.tar.gz")
+sha256sums=('@APP_SHA256@')
+package() { cp -a "$srcdir/usr" "$pkgdir/"; }

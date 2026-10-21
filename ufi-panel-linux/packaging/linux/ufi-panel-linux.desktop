@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=UFI Panel
+Name[zh_CN]=UFI 设备管理
+Comment=Manage UFI-TOOLS devices
+Comment[zh_CN]=管理 UFI-TOOLS 设备
+Exec=ufi-panel-linux %U
+Icon=ufi-panel-linux
+Terminal=false
+Categories=Network;
+StartupWMClass=io.ufi.panel.linux

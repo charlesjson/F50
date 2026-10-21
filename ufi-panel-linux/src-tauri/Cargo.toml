@@ -1,0 +1,38 @@
+[package]
+name = "ufi-panel-linux"
+version = "0.5.16"
+description = "UFI-TOOLS Linux desktop client using system WebKitGTK"
+edition = "2021"
+rust-version = "1.77.2"
+license = "MIT"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "~2.12.4", features = ["image-png"] }
+ksni = "=0.3.6"
+gtk = "=0.18.2"
+webkit2gtk = { version = "=2.0.2", features = ["v2_40"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-clipboard-manager = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["sync", "time"] }
+base64 = "0.22"
+rand = "0.9"
+secret-service = { version = "5", features = ["rt-tokio-crypto-rust"] }
+url = "2"
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+aes-gcm = "=0.10.3"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+strip = true
+lto = "thin"
+codegen-units = 1
+panic = "abort"

@@ -1,0 +1,14 @@
+FROM debian:bookworm-slim
+ARG DEB_PACKAGE=ufi-panel-linux_0.4.4-1_amd64.deb
+COPY release/${DEB_PACKAGE} /tmp/ufi-panel-linux.deb
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+       /tmp/ufi-panel-linux.deb nodejs xvfb xauth dbus-x11 fonts-noto-cjk ca-certificates \
+    && rm -rf /var/lib/apt/lists/* /tmp/ufi-panel-linux.deb \
+    && useradd --create-home --uid 1000 tester
+USER tester
+WORKDIR /workspace
+ENV UFI_EXECUTABLE=/usr/bin/ufi-panel-linux UFI_TEST_NO_SANDBOX=1
+# Docker's namespace restrictions need this test-only opt-in. Installed launchers
+# retain Chromium sandboxing; this image is only an isolated verification runner.
+CMD ["xvfb-run", "-a", "dbus-run-session", "--", "node", "scripts/interaction-check.cjs"]

@@ -1,0 +1,203 @@
+{
+  "version": "0.5.0",
+  "note": "此文件记录实际落地，不改变静态 APK 清单的完整性声明。implemented-unverified-device 表示代码/协议已实现但未做真机写入验证。",
+  "updates": {
+    "devices.modes": {
+      "status": "partial",
+      "behavior": "KANO、GOFORM 和 ZWRT 已有后端；GOFORM 曾真机连通但存在间歇鉴权拒绝，ZWRT 仅模拟测试；独立模式仍待实现。",
+      "files": [
+        "src/core/connection.cjs",
+        "src/core/goform.cjs",
+        "src/core/zwrt.cjs"
+      ]
+    },
+    "speed.local": {
+      "status": "implemented",
+      "behavior": "内网有界流式测速、取消和导出；F50 3 秒实测通过。",
+      "files": [
+        "src/core/transfers.cjs",
+        "src/renderer/tools-ui.mjs"
+      ]
+    },
+    "speed.cellular": {
+      "status": "implemented-unverified-device",
+      "behavior": "设备代理下载已实现；使用模拟服务验证，未做真实套餐压测。",
+      "files": [
+        "src/core/transfers.cjs"
+      ]
+    },
+    "speed.full": {
+      "status": "partial",
+      "behavior": "外网上传/下载/双向、多地址并发；未逐项做真实服务器兼容性验证。",
+      "files": [
+        "src/core/transfers.cjs"
+      ]
+    },
+    "speed.config": {
+      "status": "partial",
+      "behavior": "原 APK JSON/CONF 方案导入导出、选择；完整方案编辑器待补。",
+      "files": [
+        "src/renderer/tools-ui.mjs"
+      ]
+    },
+    "proxy.request": {
+      "status": "implemented",
+      "behavior": "原生请求编辑、状态/文本响应、导出，HTML 不执行。",
+      "files": [
+        "src/main.cjs",
+        "src/renderer/tools-ui.mjs"
+      ]
+    },
+    "updates.ufi": {
+      "status": "implemented-unverified-device",
+      "behavior": "更新目录、下载跟踪、安装与版本恢复；未在用户设备实际升级。",
+      "files": [
+        "src/core/transfers.cjs",
+        "src/core/maintenance.cjs"
+      ]
+    },
+    "appearance.device": {
+      "status": "implemented-unverified-device",
+      "behavior": "11 项主题配置、重置；真机读取，写入模拟测试。",
+      "files": [
+        "src/core/maintenance.cjs"
+      ]
+    },
+    "appearance.files": {
+      "status": "partial",
+      "behavior": "上传、指定文件删除和清空；完整文件枚举未接入。",
+      "files": [
+        "src/main.cjs"
+      ]
+    },
+    "settings.password": {
+      "status": "implemented-unverified-device",
+      "behavior": "UFI/原厂口令修改和当前/保存凭据同步；真机未改口令。",
+      "files": [
+        "src/core/maintenance.cjs",
+        "src/main.cjs"
+      ]
+    },
+    "app.theme": {
+      "status": "partial",
+      "behavior": "浅色、深色、跟随系统已实现；不使用 Android Monet。",
+      "files": [
+        "src/renderer/tools-ui.mjs",
+        "src/renderer/style.css"
+      ]
+    },
+    "app.scale": {
+      "status": "partial",
+      "behavior": "80%–120% 界面缩放，持久保存。",
+      "files": [
+        "src/main.cjs",
+        "src/renderer/tools-ui.mjs"
+      ]
+    },
+    "app.widget": {
+      "status": "partial",
+      "behavior": "托盘与置顶监控窗口已实现；字段拖拽/多皮肤待补。",
+      "files": [
+        "src/renderer/monitor.html",
+        "src/main.cjs"
+      ]
+    },
+    "app.background": {
+      "status": "partial",
+      "behavior": "主窗隐藏监控更新、发行包电脑登录自启；完整通知策略待补。",
+      "files": [
+        "src/main.cjs"
+      ]
+    },
+    "cellular.voice": {
+      "status": "implemented-unverified-device",
+      "behavior": "每个目标卡槽先读取再提交；F50 只读验证。",
+      "files": [
+        "src/core/maintenance.cjs",
+        "src/renderer/tools-ui.mjs"
+      ]
+    },
+    "activity.list": {
+      "status": "implemented-unverified-device",
+      "behavior": "ZWRT 原生活动列表读取；未真机验证。",
+      "files": [
+        "src/core/zwrt.cjs"
+      ]
+    },
+    "recovery.config": {
+      "status": "implemented-unverified-device",
+      "behavior": "ZWRT 恢复规则、状态、恢复检测已接入；未真机验证。",
+      "files": [
+        "src/core/zwrt.cjs"
+      ]
+    },
+    "remote.nms": {
+      "status": "partial",
+      "behavior": "ZWRT 读取/修改基本 NMS 连接配置；CA/后台列表完整编辑待补。",
+      "files": [
+        "src/core/zwrt.cjs",
+        "src/renderer/tools-ui.mjs"
+      ]
+    },
+    "updates.datad": {
+      "status": "partial",
+      "behavior": "ZWRT 检查、候选安装和状态读取；自动源配置/持久任务跟踪待补。",
+      "files": [
+        "src/core/zwrt.cjs"
+      ]
+    },
+    "terminal.at": {
+      "status": "partial",
+      "behavior": "支持显式槽位 AT；ZWRT 通道尚未适配。",
+      "files": [
+        "src/core/client.cjs"
+      ]
+    },
+    "terminal.oneclick": {
+      "status": "implemented-unverified-device",
+      "behavior": "KANO 一键工程 Shell 已有明确操作入口；真机未执行。",
+      "files": [
+        "src/core/maintenance.cjs"
+      ]
+    },
+    "terminal.ttyd": {
+      "status": "implemented-unverified-device",
+      "behavior": "检测指定端口后打开隔离的 TTYD 窗口；未在真机启动终端。",
+      "files": [
+        "src/main.cjs"
+      ]
+    },
+    "overview.health": {
+      "status": "implemented",
+      "behavior": "主进程默认每 2 秒持续采集；温度、CPU、内存和网速趋势；隐藏窗口持续运行，悬浮窗共用读取，断线显示过期并断开曲线。F50 真实连续样本通过。",
+      "files": [
+        "src/core/telemetry.cjs",
+        "src/renderer/telemetry-data.mjs",
+        "src/renderer/chart.mjs",
+        "src/renderer/app.js"
+      ]
+    },
+    "app.refresh": {
+      "status": "partial",
+      "behavior": "1/2/5/10/15/30 秒与暂停、间隔记忆、失败退避、单轮读取、恢复可见时同步历史；重连策略配置尚未全部对齐 APK。",
+      "files": [
+        "src/core/telemetry.cjs",
+        "src/renderer/app.js"
+      ]
+    }
+  },
+  "interactionImprovements": {
+    "neighbors": "邻区直接选取锁定、自动带入参数、搜索排序、手动输入折叠；真实写入未执行。",
+    "at": "24 个查询模板、搜索说明、执行前卡槽确认；模板未逐条真机执行。",
+    "sms": "国家名与区号搜索、国际号码预览、主进程规范化；发信测试使用本地模拟设备。",
+    "dialogs": "取消确认后恢复触发按钮焦点，返回表单保留草稿。",
+    "smsMailboxes": "按原始 tag 分收件、发件、草稿、其他；跨页扫描，已加载计数，回复／再次发送／继续编辑，保留 ZWRT tag。"
+  },
+  "linuxPackaging": {
+    "framework": "已迁移到 Tauri 2 + 系统 WebKitGTK；系统 Node.js 18+ 后台，不包含 Electron/Chromium。",
+    "arch": "原生 Tauri pkg.tar.zst。",
+    "deb": "原生 Tauri DEB，Debian 12 基线编译。",
+    "rpm": "原生 Tauri RPM 4 格式。",
+    "details": "docs/RELEASE-0.5.0.md"
+  }
+}

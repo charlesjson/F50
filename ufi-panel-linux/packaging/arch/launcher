@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+# Resolve the installed layout; this also permits validation in an extracted package.
+ufi_app_dir=$(CDPATH= cd -- "$(dirname -- "$(readlink -f -- "$0")")/../lib/ufi-panel-linux" && pwd)
+unset ELECTRON_RUN_AS_NODE
+exec /usr/bin/electron43 "$ufi_app_dir/app.asar" "$@"

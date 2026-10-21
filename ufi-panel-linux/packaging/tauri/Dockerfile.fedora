@@ -1,0 +1,12 @@
+FROM fedora:43
+COPY release/ufi-panel-linux-0.5.0-1.x86_64.rpm /tmp/ufi-panel-linux.rpm
+RUN dnf install -y /tmp/ufi-panel-linux.rpm xorg-x11-server-Xvfb xorg-x11-xauth dbus-x11 \
+    xwininfo xwd openbox webkitgtk6.0 google-noto-sans-cjk-fonts \
+    && dnf clean all && rm -f /tmp/ufi-panel-linux.rpm \
+    && useradd --create-home --uid 1000 tester
+USER tester
+WORKDIR /workspace
+ENV UFI_TAURI_DRIVER=/workspace/build/tauri-test-tools/bin/tauri-driver \
+    UFI_EXECUTABLE=/usr/bin/ufi-panel-linux UFI_TEST_WINDOW_MANAGER=1 \
+    WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS=1
+CMD ["xvfb-run", "-a", "dbus-run-session", "--", "node", "scripts/tauri-interaction-check.cjs"]

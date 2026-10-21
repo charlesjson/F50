@@ -1,0 +1,5 @@
+FROM ufi-panel-tauri-debian12-validation:0.5.0
+USER root
+COPY release/ufi-panel-linux_0.5.0-1_amd64.deb /tmp/ufi-panel-linux.deb
+RUN dpkg -i /tmp/ufi-panel-linux.deb && rm /tmp/ufi-panel-linux.deb
+USER tester

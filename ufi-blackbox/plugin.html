@@ -1,0 +1,170 @@
+<style>
+#ufi-blackbox-launch{margin:8px;padding:9px 15px;border:1px solid #28756c;border-radius:9px;background:#effaf7;color:#17594f;cursor:pointer;font:inherit}
+#ufi-blackbox-panel{--bb-bg:#f4f7f6;--bb-card:#fff;--bb-ink:#183a35;--bb-muted:#617670;--bb-border:#dce7e2;box-sizing:border-box;position:fixed;inset:12px;z-index:99980;background:var(--bb-bg);color:var(--bb-ink);border:1px solid var(--bb-border);border-radius:16px;box-shadow:0 12px 80px #0005;overflow:auto;text-align:left;font:14px/1.6 system-ui,sans-serif}
+#ufi-blackbox-panel[hidden]{display:none!important}#ufi-blackbox-panel *{box-sizing:border-box}
+#ufi-blackbox-panel .bb-wrap{max-width:1220px;margin:auto;padding:24px}#ufi-blackbox-panel h2{font-size:25px;margin:0;font-weight:700;letter-spacing:.02em}#ufi-blackbox-panel h3{font-size:15px;margin:0 0 12px}#ufi-blackbox-panel p{margin:5px 0;color:var(--bb-muted)}#ufi-blackbox-panel .bb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}
+#ufi-blackbox-panel button,#ufi-blackbox-panel select{border:1px solid var(--bb-border);border-radius:8px;background:var(--bb-card);color:var(--bb-ink);padding:8px 12px;cursor:pointer;font:inherit}#ufi-blackbox-panel button:disabled{opacity:.5;cursor:wait}#ufi-blackbox-panel button:focus-visible{outline:3px solid #58b7a5;outline-offset:2px}#ufi-blackbox-panel .bb-primary{background:#176e5d;border-color:#176e5d;color:white}#ufi-blackbox-panel .bb-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#ufi-blackbox-panel .bb-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}#ufi-blackbox-panel .bb-card{border:1px solid var(--bb-border);border-radius:12px;background:var(--bb-card);padding:17px;min-width:0}#ufi-blackbox-panel .bb-label{font-size:12px;color:var(--bb-muted)}#ufi-blackbox-panel .bb-value{font-size:25px;font-variant-numeric:tabular-nums;margin:5px 0;font-weight:650;word-break:break-word}#ufi-blackbox-panel .bb-sub{font-size:12px;color:var(--bb-muted)}
+#ufi-blackbox-panel .bb-charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}#ufi-blackbox-panel canvas{display:block;width:100%;height:200px}#ufi-blackbox-panel .bb-status{font-size:13px;color:#176e5d}#ufi-blackbox-panel .bb-status[data-bad="true"]{color:#b24b26}#ufi-blackbox-panel .bb-message{min-height:24px;margin:12px 0;color:var(--bb-muted);overflow-wrap:anywhere}#ufi-blackbox-panel .bb-event{display:grid;grid-template-columns:160px 1fr;gap:12px;padding:11px 0;border-top:1px solid var(--bb-border)}#ufi-blackbox-panel .bb-event time{color:var(--bb-muted);font-size:12px}#ufi-blackbox-panel .bb-event p{margin:0;font-size:13px}#ufi-blackbox-panel .bb-legend{font-size:12px;color:var(--bb-muted);margin-top:10px}#ufi-blackbox-panel .bb-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#208273;margin-right:5px}
+@media(prefers-color-scheme:dark){#ufi-blackbox-panel{--bb-bg:#14201e;--bb-card:#1c2c28;--bb-ink:#e0eee8;--bb-muted:#a1b6ae;--bb-border:#354740}#ufi-blackbox-panel .bb-status{color:#74c7b1}#ufi-blackbox-panel .bb-status[data-bad="true"]{color:#ffb47c}}
+@media(max-width:680px){#ufi-blackbox-panel{inset:0;border-radius:0}#ufi-blackbox-panel .bb-wrap{padding:16px}#ufi-blackbox-panel .bb-grid{grid-template-columns:1fr 1fr}#ufi-blackbox-panel .bb-charts{grid-template-columns:1fr}#ufi-blackbox-panel .bb-event{grid-template-columns:1fr;gap:2px}#ufi-blackbox-panel h2{font-size:22px}}
+</style>
+<script>
+(() => {
+  'use strict';
+  if (document.getElementById('ufi-blackbox-launch')) return;
+  const HOME='/data/adb/ufi-blackbox';
+  let panel, timer, busy=false, stopped=false, previousFocus, resizeObserver, exportURL, panelListenerInstalled=false, accessError=false;
+  const text=(id,value)=>{const e=panel.querySelector('[data-bb="'+id+'"]');if(e)e.textContent=value;};
+  const number=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value))?Number(value):null;
+  const metric=(value,unit='')=>number(value)===null?'暂无数据':Number(value).toFixed(1)+unit;
+  const time=at=>new Date(at).toLocaleString('zh-CN',{hour12:false});
+  const shortTime=at=>new Date(at).toLocaleTimeString('zh-CN',{hour12:false});
+  const labels={network_type:'网络模式',ppp_status:'蜂窝连接',Lte_cell_id:'4G 小区',Nr_cell_id:'5G 小区',Lte_pci:'4G PCI',Nr_pci:'5G PCI',Lte_bands:'4G 频段',Nr_bands:'5G 频段',Z5g_rsrp:'5G RSRP',lte_rsrp:'4G RSRP',icmp_state:'外部 ICMP 探测',dns_state:'指定 DNS 探测'};
+  const states={reachable:'两个目标均有响应',partial:'一个目标无响应',no_reply:'未得到有效响应',resolved:'解析成功'};
+  function setBusy(value){busy=value;if(panel)for(const b of panel.querySelectorAll('button[data-action]'))if(b.dataset.action!=='close')b.disabled=value;}
+  async function shell(command) {
+    if(typeof runShellWithRoot!=='function')throw Error('请先登录 UFI-TOOLS，再打开插件');
+    const response=await runShellWithRoot(command,15000);
+    if(!response||response.success===false)throw Error(typeof response?.content==='string'?response.content:'设备请求失败');
+    let value=response.content??response.result??response;
+    for(let depth=0;depth<4;depth++){
+      if(typeof value==='string'){try{value=JSON.parse(value.trim());}catch{throw Error(value.slice(0,180)||'设备未返回结果');}}
+      else if(value&&typeof value==='object'&&'content' in value)value=value.content;
+      else if(value&&typeof value==='object'&&'result' in value)value=value.result;
+      else break;
+    }
+    if(!value||typeof value!=='object')throw Error('设备返回格式不正确');
+    if(value.error)throw Error(value.error);
+    return value;
+  }
+  function chart(canvas,records,getValue,color,unit) {
+    const width=canvas.clientWidth||450,height=200,dpr=window.devicePixelRatio||1;
+    canvas.width=Math.round(width*dpr);canvas.height=height*dpr;
+    const c=canvas.getContext('2d');c.scale(dpr,dpr);
+    const muted=getComputedStyle(panel).getPropertyValue('--bb-muted').trim(),border=getComputedStyle(panel).getPropertyValue('--bb-border').trim();
+    const points=records.map(r=>({at:r.at,value:number(getValue(r))}));
+    const valid=points.filter(p=>p.value!==null);
+    if(!valid.length){c.fillStyle=muted;c.font='13px system-ui';c.fillText('等待有效采样',50,90);return;}
+    const left=51,right=width-12,top=15,bottom=172;
+    let low=Math.min(...valid.map(p=>p.value)),high=Math.max(...valid.map(p=>p.value));
+    const pad=Math.max((high-low)*.15,unit==='dBm'?3:5);low-=pad;high+=pad;
+    if(unit==='ms')low=Math.max(0,low);
+    const from=points[0].at,to=Math.max(points[points.length-1].at,from+15000);
+    const x=at=>left+(at-from)/(to-from)*(right-left),y=v=>bottom-(v-low)/(high-low)*(bottom-top);
+    c.font='11px system-ui';c.lineWidth=1;
+    for(let i=0;i<4;i++){const v=low+(high-low)*i/3,py=y(v);c.strokeStyle=border;c.beginPath();c.moveTo(left,py);c.lineTo(right,py);c.stroke();c.fillStyle=muted;c.textAlign='right';c.fillText(v.toFixed(0),left-7,py+4);}
+    c.fillStyle=muted;c.textAlign='left';c.fillText(unit,2,11);c.fillText(shortTime(from),left,194);c.textAlign='right';c.fillText(shortTime(to),right,194);
+    c.strokeStyle=color;c.fillStyle=color;c.lineWidth=2;c.beginPath();let last=null;
+    for(const p of points){if(p.value===null){last=null;continue;}if(!last||p.at-last.at>65000)c.moveTo(x(p.at),y(p.value));else c.lineTo(x(p.at),y(p.value));last=p;}c.stroke();
+    for(const p of valid){c.beginPath();c.arc(x(p.at),y(p.value),2,0,Math.PI*2);c.fill();}
+  }
+  function eventDescription(r){
+    const d=r.data;
+    if(d.event==='recorder_started')return ['开始记录','采集器 '+d.version+' 已启动'];
+    if(d.event==='recorder_stopped')return ['停止记录','历史日志已保存'];
+    if(d.event==='radio_change')return ['无线状态变化',(labels[d.field]||d.field)+'：'+d.before+' → '+d.after];
+    if(d.event==='signal_drop')return ['信号短时下降',(labels[d.field]||d.field)+'：'+d.before+' → '+d.after+' dBm'];
+    if(d.event==='temperature_high')return ['温度达到阈值',metric(d.temperature_c,' °C')+'；这条记录不代表已确认降频'];
+    if(d.event==='temperature_recovered')return ['温度回落',metric(d.temperature_c,' °C')];
+    if(d.event==='probe_change')return ['探测状态变化',(labels[d.field]||d.field)+'：'+(states[d.before]||d.before)+' → '+(states[d.after]||d.after)];
+    if(d.event==='source_change')return ['数据源状态变化',(d.field==='base_error'?'设备状态接口':'无线状态接口')+(d.available?'已恢复':'暂不可用')];
+    return ['状态记录',d.event||'未知事件'];
+  }
+  let latestStatus;
+  function render(s){
+    latestStatus=s;stopped=false;accessError=false;
+    const records=Array.isArray(s.records)?s.records:[],samples=records.filter(r=>r.kind==='sample'),probes=records.filter(r=>r.kind==='probe');
+    const m=samples.at(-1)?.data||{},p=probes.at(-1)?.data||{};
+    const now=Date.now(),fresh=s.last_sample_at&&now-s.last_sample_at<45000;
+    text('status',fresh?'正在记录 · '+time(s.last_sample_at):'采集器运行中 · 等待新采样');
+    panel.querySelector('[data-bb="status"]').dataset.bad=String(!fresh||!!s.log_error);
+    text('signal',metric(m.Z5g_rsrp??m.lte_rsrp,' dBm'));
+    const band=m.Nr_bands?'N'+m.Nr_bands:m.Lte_bands?'B'+m.Lte_bands:'';
+    text('radio',[m.network_type,band].filter(Boolean).join(' · ')||'暂无数据');
+    text('radioDetails','无线详情：'+[m.network_type||'模式暂无数据',band||'频段暂无数据','PCI '+(m.Nr_pci??m.Lte_pci??'暂无数据'),'频点 '+(m.Nr_fcn??m.Lte_fcn??'暂无数据'),'SINR '+metric(m.Nr_snr??m.Lte_snr??m.lte_snr,' dB'),'RSRQ '+metric(m.nr_rsrq??m.lte_rsrq,' dB')].join(' · '));
+    const ok=(p.icmp||[]).filter(x=>x.ok),latencies=ok.map(x=>x.latency_ms);
+    text('latency',latencies.length?metric(Math.min(...latencies),' ms'):'暂无响应');
+    text('probe',states[p.icmp_state]||'等待首次探测');
+    text('temperature',metric(m.temperature_c,' °C'));
+    text('deviceLoad','设备 CPU '+metric(m.cpu_usage,'%')+' · 内存 '+metric(m.mem_usage,'%'));
+    text('rss',number(s.rss_kb)===null?'暂无数据':(s.rss_kb/1024).toFixed(1)+' MB');
+    text('storage','日志 '+(s.log_bytes/1024/1024).toFixed(2)+' / 20 MiB');
+    text('dns','指定 DNS：'+(states[p.dns_state]||'等待探测')+' · '+(p.dns?.target||'223.5.5.5'));
+    text('started','自 '+time(s.started_at)+' 持续记录；关闭面板后继续运行。');
+    text('message',s.log_error?'日志写入失败：'+s.log_error:(m.base_error||m.radio_error)?'部分设备数据暂不可用，探测和其他记录继续运行。':'状态每 15 秒采样，外部探测通常每 30 秒；异常时短暂缩短到 10 秒。');
+    panel.querySelector('[data-action="toggle"]').textContent='停止记录';
+    chart(panel.querySelector('[data-bb="signalChart"]'),samples,r=>r.data.Z5g_rsrp??r.data.lte_rsrp,'#239782','dBm');
+    chart(panel.querySelector('[data-bb="probeChart"]'),probes,r=>{const a=(r.data.icmp||[]).filter(x=>x.ok).map(x=>x.latency_ms);return a.length?Math.min(...a):null;},'#578ce0','ms');
+    const list=panel.querySelector('[data-bb="events"]');list.replaceChildren();
+    const events=records.filter(r=>r.kind==='event').slice(-60).reverse();
+    if(!events.length){const e=document.createElement('p');e.textContent='尚无状态变化';list.append(e);}
+    for(const r of events){const [title,detail]=eventDescription(r),row=document.createElement('div'),stamp=document.createElement('time'),body=document.createElement('div'),strong=document.createElement('strong'),description=document.createElement('p');row.className='bb-event';stamp.textContent=time(r.at);strong.textContent=title;description.textContent=detail;body.append(strong,description);row.append(stamp,body);list.append(row);}
+  }
+  function schedule(){clearTimeout(timer);if(!panel.hidden&&!document.hidden)timer=setTimeout(refresh,15000);}
+  async function refresh(){
+    if(busy||panel.hidden)return;setBusy(true);
+    try{render(await shell(HOME+'/blackbox status'));}
+    catch(e){stopped=/recorder is stopped or unavailable/.test(e.message);accessError=!stopped;text('status',stopped?'采集器已停止':'无法读取采集器状态');panel.querySelector('[data-bb="status"]').dataset.bad='true';text('message',stopped?'点击“开始记录”继续采样。':'请确认已登录 UFI-TOOLS，且高级功能可用，再重新检查。');text('rss','—');panel.querySelector('[data-action="toggle"]').textContent=stopped?'开始记录':'重新检查';}
+    finally{setBusy(false);schedule();}
+  }
+  async function exportLogs(button){
+    setBusy(true);clearTimeout(timer);
+    try{
+      const plan=await shell(HOME+'/blackbox export-plan'),parts=[];let read=0;
+      const total=plan.files.reduce((sum,f)=>sum+f.size,0);
+      for(const f of plan.files){let offset=0;while(offset<f.size){
+        if(!/^records-[0-4]\.jsonl$/.test(f.name)||!/^\d+$/.test(String(f.inode)))throw Error('日志清单无效');
+        const chunk=await shell(HOME+'/blackbox export-chunk '+f.name+' '+offset+' '+f.size+' '+f.inode);
+        const raw=atob(chunk.data),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+        if(chunk.next<=offset||chunk.next>f.size)throw Error('日志读取未前进');
+        parts.push(bytes);read+=bytes.length;offset=chunk.next;text('message','正在导出 '+Math.round(read/Math.max(1,total)*100)+'%');
+      }}
+      const blob=new Blob(parts,{type:'application/x-ndjson;charset=utf-8'}),link=document.createElement('a');
+      if(exportURL)URL.revokeObjectURL(exportURL);exportURL=URL.createObjectURL(blob);
+      link.href=exportURL;link.download='ufi-blackbox-'+new Date().toISOString().replace(/[:.]/g,'-')+'.jsonl';link.textContent='保存日志文件（'+(read/1024).toFixed(1)+' KB）';link.style.cssText='display:inline-block;margin:8px 0;color:inherit;text-decoration:underline;font-weight:600';link.addEventListener('click',e=>{e.stopPropagation();if(typeof saveAs==='function'){e.preventDefault();saveAs(blob,link.download);}text('message','已向浏览器提交保存请求。');});
+      panel.querySelector('[data-bb="download"]').replaceChildren(link);
+      text('message','日志已准备，点击“保存日志文件”下载。');
+    }catch(e){text('message','导出失败：'+e.message);}finally{setBusy(false);schedule();}
+  }
+  function close(){panel.hidden=true;clearTimeout(timer);document.removeEventListener('keydown',keyHandler,true);previousFocus?.focus?.();}
+  function keyHandler(e){if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();close();}else if(e.key==='Tab'){const controls=[...panel.querySelectorAll('button:not(:disabled)')],first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}
+  function createPanel(){
+    panel=document.createElement('section');panel.id='ufi-blackbox-panel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','bb-title');
+    panel.innerHTML=`<div class="bb-wrap"><div class="bb-head"><div><h2 id="bb-title">网络黑匣子</h2><p>记录连接变化，回看异常发生前后。</p><div class="bb-status" data-bb="status" role="status">正在读取采集器…</div></div><button type="button" data-action="close" aria-label="关闭网络黑匣子">关闭</button></div>
+    <div class="bb-actions"><button type="button" class="bb-primary" data-action="refresh">刷新</button><button type="button" data-action="toggle">停止记录</button><button type="button" data-action="export">导出全部日志</button></div>
+    <div class="bb-grid"><div class="bb-card"><div class="bb-label">蜂窝信号 · RSRP</div><div class="bb-value" data-bb="signal">—</div><div class="bb-sub" data-bb="radio">等待采样</div></div><div class="bb-card"><div class="bb-label">外部探测 · 最低往返延迟</div><div class="bb-value" data-bb="latency">—</div><div class="bb-sub" data-bb="probe">等待探测</div></div><div class="bb-card"><div class="bb-label">设备温度</div><div class="bb-value" data-bb="temperature">—</div><div class="bb-sub" data-bb="deviceLoad">—</div></div><div class="bb-card"><div class="bb-label">采集器常驻内存 · RSS</div><div class="bb-value" data-bb="rss">—</div><div class="bb-sub" data-bb="storage">日志上限 20 MiB</div></div></div>
+    <div class="bb-charts"><div class="bb-card"><h3>信号变化</h3><canvas data-bb="signalChart" role="img" aria-label="最近蜂窝信号曲线"></canvas><div class="bb-legend"><span class="bb-dot"></span>优先显示 5G RSRP，缺失采样保留断点</div></div><div class="bb-card"><h3>连通性变化</h3><canvas data-bb="probeChart" role="img" aria-label="最近外部探测延迟曲线"></canvas><div class="bb-legend">223.5.5.5 / 119.29.29.29 · 无响应处保留断点</div></div></div>
+    <div class="bb-message" data-bb="message" role="status"></div><div data-bb="download"></div><div class="bb-card"><h3>异常与状态时间线</h3><div data-bb="events"></div></div><p data-bb="radioDetails"></p><p data-bb="dns"></p><p data-bb="started"></p><p class="bb-legend">探测失败只代表目标未响应，不能单独证明蜂窝断网。空频段或小区字段显示为暂无数据。停止记录会保留日志；删除网页插件后，后台服务仍需单独停止。</p></div>`;
+    document.body.append(panel);
+    if(!panelListenerInstalled)document.addEventListener('click',async e=>{
+      const button=e.target.closest('#ufi-blackbox-panel [data-action]');if(!button)return;
+      e.stopPropagation();
+      const action=button.dataset.action;
+      if(action==='close'){close();return;}
+      if(busy)return;
+      if(action==='refresh'){refresh();return;}
+      if(action==='export'){exportLogs(button);return;}
+      if(action==='toggle'){
+        if(accessError){refresh();return;}
+        setBusy(true);clearTimeout(timer);
+        try{await shell('/system/bin/sh '+HOME+'/service.sh '+(stopped?'start':'stop'));if(!stopped){latestStatus=undefined;text('status','已停止记录 · 日志已保留');text('rss','—');text('started','采集器已停止，当前显示停止前的采样。');text('message','下次点击“开始记录”即可继续。');button.textContent='开始记录';stopped=true;}else{setBusy(false);await refresh();}}
+        catch(err){text('message',err.message);}finally{setBusy(false);if(!stopped)schedule();}
+      }
+    },true);
+    panelListenerInstalled=true;
+    resizeObserver=new ResizeObserver(()=>{if(!panel.hidden&&latestStatus)render(latestStatus);});resizeObserver.observe(panel);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else if(!panel.hidden)refresh();});
+  }
+  function launch(){if(!panel||!panel.isConnected){document.getElementById('ufi-blackbox-panel')?.remove();resizeObserver?.disconnect();createPanel();}previousFocus=document.activeElement;panel.hidden=false;document.addEventListener('keydown',keyHandler,{capture:true});panel.querySelector('[data-action="close"]').focus();refresh();}
+  // UFI and other plugins may rebuild the menu with innerHTML. Keep the
+  // launcher listener on the document so the rebuilt button still works.
+  document.addEventListener('click',e=>{if(e.target.closest('#ufi-blackbox-launch')){e.stopPropagation();launch();}},true);
+  function attach(){
+    if(!document.body){setTimeout(attach,100);return;}
+    const button=document.createElement('button');button.id='ufi-blackbox-launch';button.type='button';button.textContent='网络黑匣子';
+    const target=document.querySelector('#functions-container, #plugin-buttons, .plugin-buttons')||document.getElementById('PLUGIN_SETTING')?.parentElement||document.body;target.append(button);
+  }
+  attach();
+})();
+</script>

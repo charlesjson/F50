@@ -1,0 +1,1 @@
+{"main-window":{"identifier":"main-window","description":"Local application window only; device pages receive no native permissions","local":true,"windows":["main"],"permissions":["core:event:allow-listen","core:event:allow-unlisten"]}}

@@ -1,0 +1,26 @@
+# Local device data and research inputs
+/backups/
+/security-analysis/
+/speedtest-results/
+/app-release.apk
+/B01-UFI-TOOLS-RESEARCH.md
+/ufi-blackbox/research/
+
+# Dependencies, build output, and local validation data
+node_modules/
+build/
+target/
+release/
+artifacts/
+__pycache__/
+*.py[cod]
+
+# Private connection settings and device logs
+private/
+.env*
+*.local.json
+*.log
+*.jsonl
+*.sqlite
+*.sqlite3
+*.sqlite3-*

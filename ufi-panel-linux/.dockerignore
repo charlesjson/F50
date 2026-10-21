@@ -1,0 +1,11 @@
+**
+!packaging/
+!packaging/tauri/
+!packaging/tauri/Dockerfile.*
+!packaging/validation/
+!packaging/tauri/
+!packaging/tauri/Dockerfile.*
+!packaging/validation/Dockerfile.*
+!release/
+!release/*.deb
+!release/*.rpm

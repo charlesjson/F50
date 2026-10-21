@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+unset ELECTRON_RUN_AS_NODE
+exec /opt/ufi-panel-linux/ufi-panel-linux "$@"

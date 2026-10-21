@@ -1,0 +1,70 @@
+{
+  "name": "ufi-panel-linux",
+  "version": "0.5.16",
+  "description": "Tauri/WebKitGTK desktop client for UFI-TOOLS",
+  "main": "src/main.cjs",
+  "author": "UFI Panel Linux contributors",
+  "license": "MIT",
+  "desktopName": "io.ufi.panel.linux.desktop",
+  "scripts": {
+    "start": "node scripts/build-tauri-ui.cjs && cargo run --manifest-path src-tauri/Cargo.toml",
+    "test": "node --test test/*.test.cjs",
+    "test:ui": "node scripts/run-tauri-checks.cjs --device",
+    "check:device": "node scripts/check-device.cjs",
+    "dist": "node scripts/build-tauri-release.cjs",
+    "pack": "npm run build:tauri",
+    "test:interactions": "node scripts/run-tauri-checks.cjs",
+    "test:plugins": "node scripts/run-tauri-checks.cjs --plugins",
+    "test:plugin-menus": "node scripts/run-tauri-checks.cjs --plugin-menus",
+    "test:plugin-view": "node scripts/run-tauri-checks.cjs --plugin-view",
+    "test:sidebar": "node scripts/run-tauri-checks.cjs --sidebar",
+    "plan:build": "python3 scripts/build-parity-catalog.py && node scripts/build-parity-prototype.cjs",
+    "plan:preview": "node scripts/serve-parity-prototype.cjs",
+    "plan:check": "node scripts/check-parity-prototype.cjs",
+    "test:telemetry": "node scripts/run-tauri-checks.cjs --device",
+    "test:history": "node scripts/run-tauri-checks.cjs --history",
+    "test:live-charts": "node scripts/run-tauri-checks.cjs --live-charts",
+    "test:client-access": "node scripts/run-tauri-checks.cjs --client-access",
+    "dist:packages": "node scripts/build-tauri-release.cjs",
+    "start:electron-legacy": "electron .",
+    "build:tauri": "node scripts/build-tauri-ui.cjs && cargo build --release --manifest-path src-tauri/Cargo.toml",
+    "dist:electron-legacy": "npm run dist:portable:electron-legacy && node scripts/build-linux-packages.cjs",
+    "package:tauri": "node scripts/package-tauri.cjs",
+    "test:electron-legacy": "node scripts/interaction-check.cjs",
+    "pack:electron-legacy": "electron-builder --linux dir --publish never",
+    "test:goform:electron-legacy": "node scripts/check-goform-ui.cjs",
+    "dist:portable:electron-legacy": "electron-builder --linux AppImage tar.gz --publish never",
+    "test:tray": "node scripts/run-tauri-checks.cjs --tray",
+    "test:sessions": "node scripts/run-tauri-checks.cjs --sessions",
+    "test:startup": "node scripts/run-tauri-checks.cjs --startup"
+  },
+  "devDependencies": {
+    "electron-builder": "26.15.3",
+    "playwright": "1.61.1"
+  },
+  "build": {
+    "appId": "io.ufi.panel.linux",
+    "productName": "UFI Panel Linux",
+    "artifactName": "ufi-panel-linux-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "linux": {
+      "category": "Network",
+      "icon": "assets/icon.png",
+      "executableName": "ufi-panel-linux",
+      "syncDesktopName": true,
+      "desktop": {
+        "entry": {
+          "StartupWMClass": "io.ufi.panel.linux",
+          "Comment": "UFI-TOOLS 设备管理台"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=UFI Panel
+Name[zh_CN]=UFI 设备管理
+Comment=Manage UFI-TOOLS devices using system WebKitGTK
+Comment[zh_CN]=使用系统 WebKitGTK 的 UFI 设备管理器
+Exec=ufi-panel-linux
+Icon=ufi-panel-linux
+Terminal=false
+Categories=Network;
+StartupWMClass=ufi-panel-linux

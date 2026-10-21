@@ -1,0 +1,23 @@
+# Local binary package. The application source is MIT; Electron comes from Arch.
+pkgname=ufi-panel-linux
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc='Desktop client for UFI-TOOLS devices (uses system Electron 43)'
+arch=('x86_64')
+license=('MIT')
+depends=('electron43' 'libsecret' 'xdg-utils')
+optdepends=('gnome-keyring: encrypted credential storage via Secret Service'
+            'kwallet: encrypted credential storage on KDE')
+options=('!strip' '!debug')
+source=("ufi-panel-linux-${pkgver}-app.tar.gz")
+sha256sums=('@APP_SHA256@')
+
+package() {
+  install -Dm644 "$srcdir/app.asar" "$pkgdir/usr/lib/ufi-panel-linux/app.asar"
+  install -Dm755 "$srcdir/launcher" "$pkgdir/usr/bin/ufi-panel-linux"
+  install -Dm644 "$srcdir/ufi-panel-linux.desktop" "$pkgdir/usr/share/applications/io.ufi.panel.linux.desktop"
+  install -Dm644 "$srcdir/icon.png" "$pkgdir/usr/share/icons/hicolor/512x512/apps/ufi-panel-linux.png"
+  install -Dm644 "$srcdir/icon.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/ufi-panel-linux.svg"
+  install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 "$srcdir/INSTALL.md" "$pkgdir/usr/share/doc/$pkgname/INSTALL.md"
+}

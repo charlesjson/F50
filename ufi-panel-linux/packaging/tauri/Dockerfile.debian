@@ -1,0 +1,12 @@
+FROM debian:bookworm-slim
+COPY release/ufi-panel-linux_0.5.0-1_amd64.deb /tmp/ufi-panel-linux.deb
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    /tmp/ufi-panel-linux.deb ca-certificates xvfb xauth dbus-x11 x11-apps x11-utils openbox webkit2gtk-driver fonts-wqy-microhei \
+    && rm -rf /var/lib/apt/lists/* /tmp/ufi-panel-linux.deb \
+    && useradd --create-home --uid 1000 tester
+USER tester
+WORKDIR /workspace
+ENV UFI_TAURI_DRIVER=/workspace/build/tauri-test-tools/bin/tauri-driver \
+    UFI_EXECUTABLE=/usr/bin/ufi-panel-linux UFI_TEST_WINDOW_MANAGER=1 \
+    WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS=1
+CMD ["xvfb-run", "-a", "dbus-run-session", "--", "node", "scripts/tauri-interaction-check.cjs"]

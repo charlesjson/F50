@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UFI · 设备状态</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./tray-status.css">
+</head>
+<body class="tray-popup">
+  <section class="sidebar-telemetry" id="sidebar-telemetry" aria-label="实时设备状态" data-state="offline">
+    <header id="tray-drag" title="拖动此处移动窗口">
+      <div class="sidebar-telemetry-heading"><h2>设备状态</h2><span id="sidebar-telemetry-status" role="status">未连接</span></div>
+      <p id="tray-device" class="tray-device">UFI Panel</p>
+    </header>
+    <dl class="sidebar-readings">
+      <div><dt>CPU</dt><dd id="sidebar-cpu"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div><dt>内存</dt><dd id="sidebar-memory"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div><dt title="CPU 温度">温度</dt><dd id="sidebar-temperature"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div><dt>今日用量</dt><dd id="sidebar-daily"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div><dt>本月累计</dt><dd id="sidebar-monthly"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div class="sidebar-download"><dt>下载</dt><dd id="sidebar-download"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div class="sidebar-upload"><dt>上传</dt><dd id="sidebar-upload"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+      <div><dt title="设备报告的 Wi-Fi 接入终端">Wi-Fi 接入</dt><dd id="sidebar-clients"><span class="sidebar-number">—</span><span class="sidebar-unit"></span></dd></div>
+    </dl>
+    <p class="sidebar-updated" id="sidebar-updated">连接设备后显示</p>
+    <button id="tray-show-main" type="button">打开管理台 <span aria-hidden="true">↗</span></button>
+  </section>
+  <script type="module" src="./tray-status.mjs"></script>
+</body>
+</html>

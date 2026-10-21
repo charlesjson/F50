@@ -1,0 +1,50 @@
+'use strict';
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const fsp=require('node:fs/promises');const os=require('node:os');const path=require('node:path');const http=require('node:http');const {once}=require('node:events');const crypto=require('node:crypto');const {spawn}=require('node:child_process');const readline=require('node:readline');
+async function worker(t,directory,key){
+ const child=spawn(process.execPath,[path.join(__dirname,'../src/worker.cjs')],{stdio:['pipe','pipe','pipe']});const pending=new Map(),events=[];let next=0,ready;const initialized=new Promise(resolve=>ready=resolve);let lastHost;
+ const send=value=>child.stdin.write(JSON.stringify(value)+'\n');
+ readline.createInterface({input:child.stdout}).on('line',line=>{const packet=JSON.parse(line);if(packet.kind==='ready')ready();else if(packet.kind==='host'){lastHost=packet;send({kind:'host-response',id:packet.id,ok:true,value:packet.action==='confirm'?{response:0}:null});}else if(packet.kind==='event')events.push(packet);else if(packet.kind==='response'){const item=pending.get(packet.id);pending.delete(packet.id);if(item)packet.ok?item.resolve(packet.value):item.reject(new Error(packet.error));}});
+ child.stderr.on('data',data=>{throw new Error('Unexpected worker stderr: '+data.toString());});
+ t.after(()=>{child.stdin.end();child.kill();});send({kind:'init',directory,masterKey:key.toString('base64')});await initialized;
+ return{events,child,get lastHost(){return lastHost},request(action,input){return new Promise((resolve,reject)=>{const id=++next;pending.set(id,{resolve,reject});send({kind:'request',id,action,input});});}};
+}
+test('Tauri worker retains device operations, one-use confirmation, encrypted profiles and cancellation over private stdio',async t=>{
+ const directory=await fsp.mkdtemp(path.join(os.tmpdir(),'ufi-backend-'));t.after(()=>fsp.rm(directory,{recursive:true,force:true}));const key=crypto.randomBytes(32),writes=[];
+ const server=http.createServer(async(req,res)=>{const u=new URL(req.url,'http://fixture'),cmd=u.searchParams.get('cmd');res.setHeader('content-type','application/json');const json=data=>res.end(JSON.stringify(data));
+ if(u.pathname==='/api/version_info')return json({model:'F50',app_ver:'fixture'});if(u.pathname==='/api/baseDeviceInfo')return json({cpu_temp:52000,cpu_usage:12});if(u.pathname==='/api/connInfo')return json({});if(u.pathname==='/api/get_cookie')return json({cookie:'stok=fixture'});if(cmd==='loginfo')return json({loginfo:'ok'});if(cmd==='RD')return json({RD:'fixture'});if(cmd==='cr_version,wa_inner_version')return json({cr_version:'B09',wa_inner_version:'web'});
+ if(cmd==='sms_data_total')return json({messages:[{id:'1',tag:'1',number:'10000',content:Buffer.from('received').toString('base64')},{id:'2',tag:'2',number:'10001',content:Buffer.from('sent').toString('base64')}]});
+ if(req.method==='POST'){let body='';for await(const chunk of req)body+=chunk;writes.push(Object.fromEntries(new URLSearchParams(body)));return json({result:'success'});}
+ return json({network_type:'5G',realtime_rx_thrpt:'1234'});
+ });server.listen(0,'127.0.0.1');await once(server,'listening');t.after(()=>{server.closeAllConnections();server.close();});
+ const app=await worker(t,directory,key),address=`http://127.0.0.1:${server.address().port}`;
+ await app.request('telemetry-configure',0);
+ const connection=await app.request('connect',{name:'fixture',address,password:'private-test-password',ztePassword:'private-zte',remember:true});
+ const profiles=await app.request('profiles');assert.equal(profiles.canSaveSecrets,true);assert.equal(profiles.profiles[0].hasSecret,true);assert.equal(JSON.stringify(profiles).includes('private-test-password'),false);
+ const stored=fs.readFileSync(path.join(directory,'profiles.json'),'utf8');assert.equal(stored.includes('private-test-password'),false);assert.equal(stored.includes('private-zte'),false);assert.equal(fs.statSync(path.join(directory,'profiles.json')).mode&0o777,0o600);
+ assert.equal((await app.request('sms',{folder:'inbox'})).messages[0].text,'received');assert.equal((await app.request('sms',{folder:'sent'})).messages[0].text,'sent');
+ const plan=await app.request('operation-prepare',{name:'sms-send',data:{number:'10000',content:'fixture only'}});assert.equal(writes.length,0);await app.request('operation-cancel',plan.id);await assert.rejects(app.request('operation-commit',plan.id),/过期/);assert.equal(writes.length,0);
+ const accepted=await app.request('operation-prepare',{name:'sms-send',data:{number:'10000',content:'fixture only'}});await app.request('operation-commit',accepted.id);assert.equal(writes.length,1);await assert.rejects(app.request('operation-commit',accepted.id),/过期/);assert.equal(writes.length,1);
+ const cancelled=await app.request('command',{kind:'at',command:'AT+CSQ',slot:'1'});assert.equal(cancelled.cancelled,true);assert.match(app.lastHost.input.detail,/SIM 卡槽：1/);assert.equal(writes.length,1);
+ await app.request('snapshot');
+ const telemetry=app.events.find(e=>e.event==='telemetry').payload;
+ assert.deepEqual(telemetry.device,{mode:'KANO',address,name:'fixture'});assert.equal(telemetry.interval,0);
+ assert.equal(JSON.stringify(telemetry).includes('private-test-password'),false);assert.equal(JSON.stringify(telemetry).includes('private-zte'),false);
+ const status=app.events.filter(e=>e.event==='monitor').at(-1).payload.status;
+ assert.deepEqual(Object.keys(status).sort(),['connected','interval','name','snapshot','stale']);
+ assert.equal(status.name,'fixture');assert.equal(status.connected,true);assert.equal(status.interval,0);assert.equal(status.stale,false);
+ assert.deepEqual(Object.keys(status.snapshot).sort(),['at','base','network']);
+ assert.deepEqual(status.snapshot.base,{cpu_usage:12,mem_usage:null,cpu_temp:52000,daily_data:null,monthly_data:null});
+ assert.deepEqual(status.snapshot.network,{realtime_rx_thrpt:1234,realtime_tx_thrpt:null,wifi_access_sta_num:null});
+ for(const privateValue of [address,'private-test-password','private-zte','stok=fixture'])assert.equal(JSON.stringify(status).includes(privateValue),false);
+ await app.request('open-panel');
+ assert.equal(app.lastHost.action,'open-panel');
+ const session=app.lastHost.input.session;
+ assert.match(session.key,/^[a-f0-9]{64}$/);assert.equal(session.address,address+'/');
+ assert.equal(session.authorization,crypto.createHash('sha256').update('private-test-password').digest('hex'));
+ assert.equal(session.password,'private-zte');
+ assert.equal(JSON.stringify(app.events).includes(session.authorization),false);
+ await app.request('disconnect');assert.equal(await app.request('connection-info'),null);assert.equal((await app.request('telemetry-state')).history.length,0);
+ assert.deepEqual(app.events.filter(e=>e.event==='monitor').at(-1).payload.status,{name:'',connected:false,interval:0,stale:false,snapshot:null});
+ await app.request('connect',{id:connection.profile.id,name:'fixture',address,remember:true});assert.equal((await app.request('profiles')).profiles.length,1);
+ await assert.rejects(app.request('arbitrary-shell',{command:'anything'}),/未知/);
+});

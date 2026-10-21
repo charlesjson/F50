@@ -1,0 +1,6 @@
+abi <abi/4.0>,
+include <tunables/global>
+profile "ufi-panel-linux" "/opt/ufi-panel-linux/ufi-panel-linux" flags=(unconfined) {
+  userns,
+  include if exists <local/ufi-panel-linux>
+}

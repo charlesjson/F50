@@ -1,0 +1,29 @@
+/* Projection hides host UI without removing it or changing plugin ownership. */
+html[data-ufi-plugin-selected]:not([data-ufi-plugin-view-ready]) body { visibility: hidden !important; }
+html[data-ufi-plugin-selected][data-ufi-plugin-full="false"] body {
+  margin: 0 !important; padding: 20px !important; min-width: 0 !important;
+  width: auto !important; box-sizing: border-box !important;
+}
+html[data-ufi-plugin-selected][data-ufi-plugin-full="false"] body > :not([data-ufi-plugin-view]),
+html[data-ufi-plugin-selected][data-ufi-plugin-full="false"] [data-ufi-plugin-view="path"] > :not([data-ufi-plugin-view]) {
+  display: none !important;
+}
+html[data-ufi-plugin-selected][data-ufi-plugin-full="false"] [data-ufi-plugin-view="path"] {
+  display: block !important; height: auto !important; max-height: none !important;
+  width: auto !important; max-width: none !important; min-width: 0 !important;
+  margin: 0 !important; padding: 0 !important; overflow: visible !important;
+}
+html[data-ufi-plugin-selected][data-ufi-plugin-full="false"] [data-ufi-plugin-view="root"].collapse[data-name="open"],
+html[data-ufi-plugin-selected][data-ufi-plugin-full="false"] [data-ufi-plugin-view="root"] .collapse[data-name="open"] {
+  height: auto !important; max-height: none !important; overflow: visible !important;
+}
+html[data-ufi-plugin-selected] #ufi-plugin-view-header {
+  display: flex !important; flex-wrap: wrap; align-items: center; gap: 12px;
+  padding: 0 0 16px; margin: 0 0 18px; border-bottom: 1px solid #64748b66;
+  position: relative; z-index: 1; font: 14px/1.5 system-ui, sans-serif;
+}
+html[data-ufi-plugin-selected] #ufi-plugin-view-header strong { font-size: 20px; }
+html[data-ufi-plugin-selected] #ufi-plugin-view-header > div { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+html[data-ufi-plugin-selected] #ufi-plugin-view-header button { padding: 8px 12px; cursor: pointer; }
+html[data-ufi-plugin-selected] #ufi-plugin-view-header p { width: 100%; margin: 0; }
+html[data-ufi-plugin-selected] #ufi-plugin-view-header p[hidden] { display: none !important; }

@@ -1,0 +1,11 @@
+FROM fedora:43
+ARG RPM_PACKAGE=ufi-panel-linux-0.4.4-1.x86_64.rpm
+COPY release/${RPM_PACKAGE} /tmp/ufi-panel-linux.rpm
+RUN dnf install -y /tmp/ufi-panel-linux.rpm nodejs xorg-x11-server-Xvfb xorg-x11-xauth dbus-x11 google-noto-sans-cjk-fonts \
+    && dnf clean all \
+    && rm -f /tmp/ufi-panel-linux.rpm \
+    && useradd --create-home --uid 1000 tester
+USER tester
+WORKDIR /workspace
+ENV UFI_EXECUTABLE=/usr/bin/ufi-panel-linux UFI_TEST_NO_SANDBOX=1
+CMD ["xvfb-run", "-a", "dbus-run-session", "--", "node", "scripts/interaction-check.cjs"]
